@@ -1,30 +1,34 @@
 (function draw(){
    var ctx = document.getElementById('canvas').getContext('2d');
-   var squareWidth = 60;
+   var side = 40;
    var canvasWidth = 180;
+   var x = 110;
+   var y = 130;
+   var backX = x + ( side/2 );
+   var backY = y - ( side/2 );
 
    ctx.beginPath();
-   ctx.moveTo(30, 90);
-   ctx.lineTo(30, squareWidth + 90);
-   ctx.lineTo(30 + squareWidth , squareWidth + 90);
-   ctx.lineTo(30 + squareWidth , 90);
-   ctx.lineTo(30, 90);
-   ctx.lineTo(60,60);
-   ctx.lineTo(60 + squareWidth , 60);
-   ctx.lineTo(60 + squareWidth , squareWidth + 60);
-   ctx.lineTo(30 + squareWidth , squareWidth + 90);
-   ctx.moveTo(90, 90);
-   ctx.lineTo(60 + squareWidth , 60);
+   ctx.moveTo(x, y);
+   ctx.lineTo(x, y + side);
+   ctx.lineTo(x+side, y+side);
+   ctx.lineTo(x+side,y);
+   ctx.lineTo(x,y);
+   ctx.lineTo(backX,backY);
+   ctx.lineTo(backX+side,backY);
+   ctx.lineTo(backX+side,backY+side);
+   ctx.lineTo(x+side, y+side);
+   ctx.moveTo(backX+side,backY);
+   ctx.lineTo(x+side,y);
    ctx.strokeStyle = 'rgb(0,120,0)';
    ctx.stroke();
 
    ctx.beginPath();
-   ctx.moveTo(60, 60);
-   ctx.lineTo(60, 60 + squareWidth);
-   ctx.lineTo(60 + squareWidth , squareWidth + 60);
-   ctx.moveTo(30, 150);
-   ctx.lineTo(60, 60 + squareWidth);
-   ctx.strokeStyle = 'rgba(0,1,0,0.3)';
+   ctx.moveTo(x, y + side);
+   ctx.lineTo(backX,backY+side);
+   ctx.lineTo(backX+side,backY+side);
+   ctx.moveTo(backX,backY);
+   ctx.lineTo(backX,backY+side);
+   ctx.strokeStyle = 'rgba(0,120,0,0.3)';
    ctx.stroke();
 
 }());
