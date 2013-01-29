@@ -1,44 +1,39 @@
+/*
+ * Exercise 28b
+ */
 (function draw(){
    
    var ctx = document.getElementById('canvas').getContext('2d');
+   var radgrad = ctx.createRadialGradient(240,150,40,240,150,180);
+   radgrad.addColorStop(0, 'rgba(255,255,125,1)');
+   radgrad.addColorStop(0.9, 'rgba(255,255,125,0.06)');
+   radgrad.addColorStop(1, 'rgba(255,255,125,0.0)');
+   
+   var radgrad3 = ctx.createRadialGradient(240,150,40,240,150,180);
+   radgrad3.addColorStop(0, 'rgba(255,255,125,1)'); 
+   radgrad3.addColorStop(0.3, 'rgba(205,92,92,0.7)');
+   radgrad3.addColorStop(0.7, 'rgba(255,192,203,0.3)');
+   radgrad3.addColorStop(1, 'rgba(205,92,92,0.0)');
 
+   var lingrad = ctx.createLinearGradient(0,0,0,150);
+   lingrad.addColorStop(0, 'rgb(30,144,255)');
+   lingrad.addColorStop(1, 'rgb(205,92,92)');
 
    ctx.beginPath();
-   var canvasW= 480;
-   var canvasH = 300;
-   ctx.fillStyle = 'rgb(0,0,128)'//sky
-   ctx.fillRect(0,0,canvasW,canvasH)
-   
-   //buildings
-   for (var i=0;i<canvasW;){ 
-      ctx.fillStyle = 'rgb(0,0,0)'
-      var x = i; 
-      var rand = Math.floor((Math.random()*4)+0);
-      var arr1 = [60,40,80,100];
-      var width = arr1[rand];
-      var rand2 = Math.floor((Math.random()*25)+0);
-      var arr2 = [30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270];
-      var height = arr2[rand2];
-      i += arr1[rand];
-      ctx.fillRect(x,height,width,canvasH);
+   ctx.fillStyle = lingrad;//sky
+   ctx.fillRect(0,0,480,185);
+   ctx.fillStyle = radgrad;
+   ctx.fillRect(0,0,480,185);
 
-      //windows
-      ctx.fillStyle = 'rgb(255,255,0)'
-      for (var e = height; e < 300;){
-         for (var t = x ; t < (width + x);){
-            var windowX = t + 4;
-            var windowY = e + 4;
-            var rand3 = Math.floor((Math.random()*5)+0);
-            var arr3 = [8,10,12,0,0];
-            var rand4 = Math.floor((Math.random()*6)+0);
-            var arr4 = [14,16,18,20,24,0];
-            var windowWidth = arr3[rand3];
-            var windowHeight = arr4[rand4];
-            ctx.fillRect(windowX,windowY,windowWidth,windowHeight);
-            t += 20;
-         }
-         e += 30;
-      }
-      
-   }
+   ctx.arc(240,150,60,0,Math.PI*2,true);//sun
+   ctx.fillStyle = 'rgb(255,255,125)';
+   ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+   ctx.fill();
+   ctx.stroke();
+
+   ctx.fillStyle = 'rgb(0,0,128)';//ocean
+   ctx.fillRect(0,185,480,116);
+   ctx.fillStyle = radgrad3;
+   ctx.fillRect(0,185,480,116)
+
 }());

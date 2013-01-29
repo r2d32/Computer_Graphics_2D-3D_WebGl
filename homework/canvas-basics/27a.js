@@ -1,3 +1,6 @@
+/*
+ * Exercise 26a
+ */
 (function draw(){
    var ctx = document.getElementById('canvas').getContext('2d');
    var side = 40;
@@ -6,7 +9,7 @@
    var y = 130;
    var backX = x + ( side/2 );
    var backY = y - ( side/2 );
-
+   //Front of the cube
    ctx.beginPath();
    ctx.moveTo(x, y);
    ctx.lineTo(x, y + side);
@@ -21,7 +24,7 @@
    ctx.lineTo(x+side,y);
    ctx.strokeStyle = 'rgb(0,120,0)';
    ctx.stroke();
-
+   //Back of the cube
    ctx.beginPath();
    ctx.moveTo(x, y + side);
    ctx.lineTo(backX,backY+side);
