@@ -5,6 +5,9 @@
    
    var ctx = document.getElementById('canvas').getContext('2d');
    var radgrad = ctx.createRadialGradient(240,150,40,240,150,180);
+   // JD: ^^^^ Here, your variable names can absolutely be more descriptive.
+   //     Instead of generic "___grad_" names, call them what they are:
+   //     gradients for the sky, sun, and ocean (see below).
    radgrad.addColorStop(0, 'rgba(255,255,125,1)');
    radgrad.addColorStop(0.9, 'rgba(255,255,125,0.06)');
    radgrad.addColorStop(1, 'rgba(255,255,125,0.0)');
@@ -21,17 +24,22 @@
 
    ctx.beginPath();
    ctx.fillStyle = lingrad;//sky
+   // JD: Notice that, if ^^^^ you named this gradient "skyGradient" or
+   //     something descriptive, then you would NOT have needed that
+   //     "//sky" comment: the code would have been self-evident!
    ctx.fillRect(0,0,480,185);
    ctx.fillStyle = radgrad;
    ctx.fillRect(0,0,480,185);
 
    ctx.arc(240,150,60,0,Math.PI*2,true);//sun
+   // JD: Same about the comment here... ^^^^
    ctx.fillStyle = 'rgb(255,255,125)';
    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
    ctx.fill();
    ctx.stroke();
 
    ctx.fillStyle = 'rgb(0,0,128)';//ocean
+   // JD: ...and here...          ^^^^
    ctx.fillRect(0,185,480,116);
    ctx.fillStyle = radgrad3;
    ctx.fillRect(0,185,480,116)

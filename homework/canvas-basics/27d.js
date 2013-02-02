@@ -28,6 +28,10 @@
    //Smile
    ctx.beginPath();
    ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+   // JD: I'm curious^^^---what determines whether you use
+   //     an apostrophe (') or double-quotes (") to delimit
+   //     your strings?  Sure, they are both legal, but your
+   //     choice between them strikes me as inconsistent.
    ctx.lineWidth = 7;
    ctx.arc(90,90,40,Math.PI*2.2,Math.PI*0.8,false);
    ctx.lineCap = 'round';
