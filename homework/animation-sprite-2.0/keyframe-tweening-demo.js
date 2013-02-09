@@ -9,8 +9,43 @@
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
         link = function (renderingContext) {
-            renderingContext.fillStyle = "green";
-            renderingContext.fillRect(-20, -20, 40, 40);
+            renderingContext.save();
+    
+
+    renderingContext.beginPath();  
+   renderingContext.strokeStyle = "black";
+   renderingContext.lineWidth = 1;
+   renderingContext.lineTo(0, 30);
+   renderingContext.lineTo(30, 30);
+   renderingContext.lineTo(30, 0);
+   renderingContext.lineTo(0, 0);
+   renderingContext.lineTo(0, 30);
+   renderingContext.fillStyle = "rgba(0, 0, 200, 0.5)";
+   renderingContext.stroke();
+   renderingContext.fill();
+   
+   //shoes
+   renderingContext.beginPath();  
+   renderingContext.lineWidth = 1;
+   renderingContext.moveTo(0, 30);
+   renderingContext.lineTo(0, 40);
+   renderingContext.lineTo(15, 40);
+   renderingContext.lineTo(15, 30);
+   renderingContext.lineTo(0, 30);
+   renderingContext.fillStyle = "rgba(0, 0, 255, 0.5)";
+   renderingContext.stroke();
+   renderingContext.fill();
+   renderingContext.beginPath();  
+   renderingContext.lineWidth = 1;
+   renderingContext.moveTo(20, 30);
+   renderingContext.lineTo(20, 40);
+   renderingContext.lineTo(35, 40);
+   renderingContext.lineTo(35, 30);
+   renderingContext.lineTo(20, 30);
+   renderingContext.fillStyle = "rgba(0, 0, 255, 0.5)";
+   renderingContext.stroke();
+   renderingContext.fill();
+    renderingContext.restore();
 
 
    
@@ -21,10 +56,44 @@
         },
 
         circle = function (renderingContext) {
-            renderingContext.strokeStyle = "red";
-            renderingContext.beginPath();
-            renderingContext.arc(0, 0, 50, 0, Math.PI * 2);
-            renderingContext.stroke();
+            renderingContext.save();
+    
+
+    renderingContext.beginPath();  
+   renderingContext.beginPath();  
+   renderingContext.strokeStyle = "black";
+   renderingContext.lineWidth = 1;
+   renderingContext.lineTo(0, 30);
+   renderingContext.lineTo(30, 30);
+   renderingContext.lineTo(30, 0);
+   renderingContext.lineTo(0, 0);
+   renderingContext.lineTo(0, 30);
+   renderingContext.fillStyle = "rgba(0, 0, 200, 0.5)";
+   renderingContext.stroke();
+   renderingContext.fill();
+   
+   //shoes
+   renderingContext.beginPath();  
+   renderingContext.lineWidth = 1;
+   renderingContext.moveTo(-5, 30);
+   renderingContext.lineTo(-5, 40);
+   renderingContext.lineTo(10, 40);
+   renderingContext.lineTo(10, 30);
+   renderingContext.lineTo(-5, 30);
+   renderingContext.fillStyle = "rgba(0, 0, 255, 0.5)";
+   renderingContext.stroke();
+   renderingContext.fill();
+   renderingContext.beginPath();  
+   renderingContext.lineWidth = 1;
+   renderingContext.moveTo(25, 30);
+   renderingContext.lineTo(25, 40);
+   renderingContext.lineTo(40, 40);
+   renderingContext.lineTo(40, 30);
+   renderingContext.lineTo(25, 30);
+   renderingContext.fillStyle = "rgba(0, 0, 255, 0.5)";
+   renderingContext.stroke();
+   renderingContext.fill();
+    renderingContext.restore();
         },
 
         // Then, we have "easing functions" that determine how
