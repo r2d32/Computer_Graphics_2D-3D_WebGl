@@ -139,14 +139,29 @@ var KeyframeTweener = {
                         );
 
                         // Draw the sprite.
-                        if (currentFrame < 31 ) {
+                        if (currentFrame < 91) {
+
                             if ( currentFrame % 4 < 2){
                                 sprites[0].draw[0](renderingContext);
                             } else {
                                 sprites[0].draw[1](renderingContext);
                             }
-                        }else{
-                            sprites[1].draw(renderingContext);
+
+                        }else if (currentFrame > 120 && currentFrame < 180){
+
+                            if ( currentFrame % 6 < 2){
+                                sprites[0].draw[2](renderingContext);
+                                sprites[0].draw[0](renderingContext);
+                            } else if (currentFrame % 6 < 4 && currentFrame % 6 > 1) {
+                                sprites[0].draw[3](renderingContext);
+                                sprites[0].draw[0](renderingContext);
+                            } else {
+                                sprites[0].draw[4](renderingContext);
+                                sprites[0].draw[0](renderingContext);
+                            }
+                            
+                        } else { 
+                            sprites[0].draw[0](renderingContext);
                         }
                         //HERE SHOULD GO THE PAC-MAN BITING FUNCTION CALL
 
