@@ -25,6 +25,21 @@ var KeyframeTweener = {
                 (distance / 2) * percentComplete * percentComplete + start :
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
     },
+    
+    drawDungeon: function() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        var img = new Image();
+        img.onload = function(){
+            ctx.drawImage(img,0,0);
+            ctx.beginPath();
+            ctx.moveTo(30,96);
+            ctx.lineTo(70,66);
+            ctx.lineTo(103,76);
+            ctx.lineTo(170,15);
+            ctx.stroke();
+        };
+        img.src = 'dungeon.png';
+    },
 
     // The big one: animation initialization.  The settings parameter
     // is expected to be a JavaScript object with the following

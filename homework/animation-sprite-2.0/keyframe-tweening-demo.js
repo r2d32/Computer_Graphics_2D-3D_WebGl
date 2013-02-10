@@ -29,7 +29,7 @@
             renderingContext.stroke();
             renderingContext.fill();
 
-           //Face
+            //Face
             renderingContext.beginPath();  
             renderingContext.strokeStyle = "black";
             renderingContext.lineWidth = 1;
@@ -134,12 +134,6 @@
             renderingContext.stroke();
             renderingContext.fill();
             renderingContext.restore();
-
-
-   
-   //Front of the cube
-
-   //Back of the 
 
         },
 
