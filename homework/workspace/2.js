@@ -4,6 +4,76 @@
 (function draw(){
    var ctx = document.getElementById('canvas').getContext('2d');
 
+   //Sword Up 
+   ctx.beginPath();  
+   ctx.strokeStyle = "black";
+   ctx.lineWidth = 1;
+   ctx.moveTo(12.5,5);
+   ctx.lineTo(17.5,5);
+   ctx.lineTo(17.5,-12.5);
+   ctx.lineTo(15, -15);
+   ctx.lineTo(12.5,-12.5);
+   ctx.lineTo(12.5,5);
+   ctx.fillStyle = "rgba(148,148,148, 1)";
+   ctx.stroke();
+   ctx.fill();
+
+   //Sword 45 
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(25,12.5);
+            renderingContext.lineTo(37.5,0);
+            renderingContext.lineTo(37.5,-5);
+            renderingContext.lineTo(35, -5);
+            renderingContext.lineTo(20,10);
+            renderingContext.lineTo(25,12.5);
+            renderingContext.fillStyle = "rgba(148,148,148, 1)";
+            renderingContext.stroke();
+            renderingContext.fill();
+            //Handle
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(22.5,7.5);
+            renderingContext.lineTo(27.5,17.5);
+            renderingContext.lineTo(25,15);
+            renderingContext.lineTo(22.5, 10);
+            renderingContext.lineTo(22.5,7.5);
+            renderingContext.fillStyle = "rgba(0,0,148, 1)";
+            renderingContext.stroke();
+            renderingContext.fill();
+   
+               //Sword flat
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(30,22.5);
+            renderingContext.lineTo(47.5,22.5);
+            renderingContext.lineTo(50,20);
+            renderingContext.lineTo(47.5, 17.5);
+            renderingContext.lineTo(30,17.5);
+            renderingContext.lineTo(30,22.5);
+            renderingContext.fillStyle = "rgba(148,148,148, 1)";
+            renderingContext.stroke();
+            renderingContext.fill();
+            //Handle
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(22.5,17.5);
+            renderingContext.lineTo(22.5,22.5);
+            renderingContext.lineTo(27.5,22.5);
+            renderingContext.lineTo(27.5, 25);
+            renderingContext.lineTo(30,25);
+            renderingContext.lineTo(30,15);
+            renderingContext.lineTo(27.5,15);
+            renderingContext.lineTo(27.5,17.5);
+            renderingContext.lineTo(22.5,17.5);
+            renderingContext.fillStyle = "rgba(0,0,148, 1)";
+            renderingContext.stroke();
+            renderingContext.fill();
+
    //Hat
    ctx.beginPath();  
    ctx.strokeStyle = "black";

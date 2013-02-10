@@ -25,22 +25,6 @@ var KeyframeTweener = {
                 (distance / 2) * percentComplete * percentComplete + start :
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
     },
-    
-    drawDungeon: function() {
-        var ctx = document.getElementById('canvas').getContext('2d');
-        var img = new Image();
-        img.onload = function(){
-            ctx.drawImage(img,0,0);
-            ctx.beginPath();
-            ctx.moveTo(30,96);
-            ctx.lineTo(70,66);
-            ctx.lineTo(103,76);
-            ctx.lineTo(170,15);
-            ctx.stroke();
-        };
-        img.src = 'dungeon.png';
-    },
-
     // The big one: animation initialization.  The settings parameter
     // is expected to be a JavaScript object with the following
     // properties:
@@ -85,6 +69,7 @@ var KeyframeTweener = {
             // Some reusable loop variables.
             var i,
                 j,
+                img,
                 maxI,
                 maxJ,
                 ease,
@@ -105,9 +90,9 @@ var KeyframeTweener = {
                 duration;
 
             // Clear the canvas.
-            fotograma  = 1;
-            renderingContext.clearRect(0, 0, width, height);//GIVE THIS THE ABILITY(FUNCTION INVOCATION)FOR BACKGROUND
-
+            img = new Image();
+            img.src = 'dungeon.png';
+            renderingContext.drawImage(img, 0, 0,800,500);//GIVE THIS THE ABILITY(FUNCTION INVOCATION)FOR BACKGROUND
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.
             for (i = 0, maxI = sprites.length; i < maxI; i += 1) {
@@ -156,9 +141,9 @@ var KeyframeTweener = {
                         // Draw the sprite.
                         if (currentFrame < 31 ) {
                             if ( currentFrame % 4 < 2){
-                                sprites[0].draw(renderingContext);
+                                sprites[0].draw[0](renderingContext);
                             } else {
-                                sprites[1].draw(renderingContext);
+                                sprites[0].draw[1](renderingContext);
                             }
                         }else{
                             sprites[1].draw(renderingContext);

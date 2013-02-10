@@ -8,7 +8,7 @@
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
-        link = function (renderingContext) {
+        linkCloseFeet = function (renderingContext) {
             renderingContext.save();
             //Hat
             renderingContext.beginPath();  
@@ -77,10 +77,10 @@
             renderingContext.strokeStyle = "black";
             renderingContext.lineWidth = 1;
             renderingContext.moveTo(22.5,17.5);
-            renderingContext.lineTo(22.5, 25);
-            renderingContext.lineTo(7.5, 25);
-            renderingContext.lineTo(7.5, 17.5);
-            renderingContext.lineTo(22.5, 17.5);
+            renderingContext.lineTo(22.5,25);
+            renderingContext.lineTo(7.5,25);
+            renderingContext.lineTo(7.5,17.5);
+            renderingContext.lineTo(22.5,17.5);
             renderingContext.fillStyle = "rgba(69, 139,0 , 1)";
             renderingContext.stroke();
             renderingContext.fill(); 
@@ -137,7 +137,7 @@
 
         },
 
-        circle = function (renderingContext) {
+        linkSeparatedFeet = function (renderingContext) {
             renderingContext.save();
             //Hat
             renderingContext.beginPath();  
@@ -274,58 +274,54 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: link,
+                draw: [linkCloseFeet,linkSeparatedFeet],
                 keyframes: [
                     {
                         frame: 0,
-                        tx: 5,
-                        ty: 20,
+                        tx: 70,
+                        ty: 70,
                         ease: KeyframeTweener.linear
                     },
 
                     {
-                        frame: 30,
-                        tx: 100,
-                        ty: 20,
-                        ease: KeyframeTweener.quadEaseInOut
+                        frame: 40,
+                        tx: 70,
+                        ty: 180,
+                        ease: KeyframeTweener.linear
                     },
 
                     {
-                        frame: 40,
-                        tx: 110,
-                        ty: 20,
-                        rotate: 30
+                        frame: 90,
+                        tx: 220,
+                        ty: 180,
+                        ease: KeyframeTweener.linear
                     },
 
                     // The last keyframe does not need an easing function.
                     {
-                        frame: 80,
-                        tx: 200,
-                        ty: 500,
-                        rotate: 60 // Keyframe.rotate uses degrees.
+                        frame: 180,
+                        tx: 220,
+                        ty: 180,
+                        ease: KeyframeTweener.linear // Keyframe.rotate uses degrees.
                     }
                 ]
             },
 
             {
-                draw: circle,
+                draw: linkCloseFeet,
                 keyframes: [
                     {
                         frame: 50,
                         tx: 300,
-                        ty: 600,
-                        sx: 0.5,
-                        sy: 0.5,
-                        ease: KeyframeTweener.quadEaseOut
+                        ty: 100,
+                  
                     },
 
                     {
                         frame: 100,
                         tx: 300,
-                        ty: 0,
-                        sx: 3,
-                        sy: 0.25,
-                        ease: KeyframeTweener.quadEaseOut
+                        ty: 100,
+          
                     },
 
                     {
