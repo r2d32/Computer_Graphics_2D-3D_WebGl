@@ -351,6 +351,72 @@
             renderingContext.restore();
 
         },
+        ghost = function (renderingContext) {
+            renderingContext.save();
+            //Ghost
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "white";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(10,10);
+            renderingContext.lineTo(30,0);
+            renderingContext.lineTo(50,0);
+            renderingContext.lineTo(70, 10);
+            renderingContext.lineTo(90,30);
+            renderingContext.lineTo(120,40);
+            renderingContext.lineTo(100,40);
+            renderingContext.lineTo(100,50);
+            renderingContext.lineTo(80,40);
+            renderingContext.lineTo(90,50);
+            renderingContext.lineTo(80,60);
+            renderingContext.lineTo(100,70);
+            renderingContext.lineTo(80,70);
+            renderingContext.lineTo(90,80);
+            renderingContext.lineTo(70,90);
+            renderingContext.lineTo(50,90);
+            renderingContext.lineTo(30,80);
+            renderingContext.lineTo(40,70);
+            renderingContext.lineTo(30,60);
+            renderingContext.lineTo(40,50);
+            renderingContext.lineTo(30,50);
+            renderingContext.lineTo(30,40);
+            renderingContext.lineTo(20,50);
+            renderingContext.lineTo(10,40);
+            renderingContext.lineTo(0,50);
+            renderingContext.lineTo(0,30);
+            renderingContext.lineTo(10,10);
+            renderingContext.fillStyle = "rgba(0,0,0,0.5)";
+            renderingContext.stroke();
+            renderingContext.fill();   
+
+            //Eye
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(20,10);
+            renderingContext.lineTo(30,10);
+            renderingContext.lineTo(30,20);
+            renderingContext.lineTo(20,30);
+            renderingContext.lineTo(10,30);
+            renderingContext.lineTo(10,20);
+            renderingContext.lineTo(20,10);
+            renderingContext.fillStyle = "rgba(255,255,255, 1)";
+            renderingContext.stroke();
+            renderingContext.fill();
+            // Red Dot
+            renderingContext.beginPath();  
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = 1;
+            renderingContext.moveTo(10,25);
+            renderingContext.lineTo(15,25);
+            renderingContext.lineTo(15,30);
+            renderingContext.lineTo(10,30);
+            renderingContext.lineTo(10,25);
+            renderingContext.fillStyle = "rgba(255,0,0, 1)";
+            renderingContext.stroke();
+            renderingContext.fill(); 
+            renderingContext.restore();
+
+        },
 
         // Then, we have "easing functions" that determine how
         // intermediate frames are computed.
@@ -371,20 +437,20 @@
                     {
                         frame: 40,
                         tx: 70,
-                        ty: 180,
-                        ease: KeyframeTweener.linear
+                        ty: 100,
+                        ease: KeyframeTweener.cubeEaseIn
                     },
 
                     {
                         frame: 90,
                         tx: 220,
                         ty: 180,
-                        ease: KeyframeTweener.linear
+                        ease: KeyframeTweener.cubeEaseIn
                     },
 
                     // The last keyframe does not need an easing function.
                     {
-                        frame: 180,
+                        frame: 290,
                         tx: 220,
                         ty: 180,
                         ease: KeyframeTweener.linear // Keyframe.rotate uses degrees.
@@ -393,28 +459,28 @@
             },
 
             {
-                draw: linkCloseFeet,
+                draw: [ghost],
                 keyframes: [
                     {
-                        frame: 50,
-                        tx: 300,
+                        frame: 0,
+                        tx: 255,
                         ty: 100,
                   
                     },
 
                     {
-                        frame: 100,
-                        tx: 300,
-                        ty: 100,
+                        frame: 150,
+                        tx: 225,
+                        ty: 130,
           
                     },
 
                     {
-                        frame: 150,
+                        frame: 180,
                         tx: 600,
-                        ty: 600,
-                        sx: 0.5,
-                        sy: 0.5
+                        ty: 50,
+                        sx: 0.1,
+                        sy: 0.1,
                     }
                 ]
             }

@@ -9,9 +9,9 @@ var KeyframeTweener = {
         return distance * percentComplete + start;
     },
 
-    quadEaseIn: function (currentTime, start, distance, duration) {
+    cubeEaseIn: function (currentTime, start, distance, duration) {
         var percentComplete = currentTime / duration;
-        return distance * percentComplete * percentComplete + start;
+        return distance * percentComplete * percentComplete * percentComplete + start;
     },
 
     quadEaseOut: function (currentTime, start, distance, duration) {
@@ -139,30 +139,34 @@ var KeyframeTweener = {
                         );
 
                         // Draw the sprite.
-                        if (currentFrame < 91) {
+                        if ( i == 0 ){
+                            if (currentFrame < 91) {
 
-                            if ( currentFrame % 4 < 2){
+                                if ( currentFrame % 4 < 2){
+                                    sprites[0].draw[0](renderingContext);
+                                } else {
+                                    sprites[0].draw[1](renderingContext);
+                                }
+
+                            }else if (currentFrame > 120 && currentFrame < 180){
+
+                                if ( currentFrame % 6 < 2){
+                                    sprites[0].draw[2](renderingContext);
+                                    sprites[0].draw[0](renderingContext);
+                                } else if (currentFrame % 6 < 4 && currentFrame % 6 > 1) {
+                                    sprites[0].draw[3](renderingContext);
+                                    sprites[0].draw[0](renderingContext);
+                                } else {
+                                    sprites[0].draw[4](renderingContext);
+                                    sprites[0].draw[0](renderingContext);
+                                }
+                                
+                            } else { 
                                 sprites[0].draw[0](renderingContext);
-                            } else {
-                                sprites[0].draw[1](renderingContext);
                             }
-
-                        }else if (currentFrame > 120 && currentFrame < 180){
-
-                            if ( currentFrame % 6 < 2){
-                                sprites[0].draw[2](renderingContext);
-                                sprites[0].draw[0](renderingContext);
-                            } else if (currentFrame % 6 < 4 && currentFrame % 6 > 1) {
-                                sprites[0].draw[3](renderingContext);
-                                sprites[0].draw[0](renderingContext);
-                            } else {
-                                sprites[0].draw[4](renderingContext);
-                                sprites[0].draw[0](renderingContext);
-                            }
-                            
-                        } else { 
-                            sprites[0].draw[0](renderingContext);
                         }
+                        if(i==1){
+                        sprites[1].draw[0](renderingContext);}
                         //HERE SHOULD GO THE PAC-MAN BITING FUNCTION CALL
 
                         // Clean up.
