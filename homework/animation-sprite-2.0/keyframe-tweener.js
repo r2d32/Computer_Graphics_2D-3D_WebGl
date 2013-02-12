@@ -112,10 +112,11 @@ var KeyframeTweener = {
                 currentTweenFrame,
                 duration;
 
-            // Clear the canvas.
+            // Calls an Image for the canvas and repaints it every frame
             img = new Image();
             img.src = 'dungeon.png';
-            renderingContext.drawImage(img, 0, 0,800,500);//GIVE THIS THE ABILITY(FUNCTION INVOCATION)FOR BACKGROUND
+            renderingContext.drawImage(img, 0, 0,800,500);
+
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.
             for (i = 0, maxI = sprites.length; i < maxI; i += 1) {
@@ -161,13 +162,14 @@ var KeyframeTweener = {
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
 
-                        // Draw the sprite.
+                        // Draws the corresponding sprite depending on the sequence 
                         if ( i == 0 ){
                             if (currentFrame < 91) {
 
                                 if ( currentFrame % 4 < 2){
                                     sprites[0].draw[0](renderingContext);
                                 } else {
+                                    sprites[0].draw[0](renderingContext);
                                     sprites[0].draw[1](renderingContext);
                                 }
 
@@ -189,8 +191,8 @@ var KeyframeTweener = {
                             }
                         }
                         if(i==1){
-                        sprites[1].draw[0](renderingContext);}
-                        //HERE SHOULD GO THE PAC-MAN BITING FUNCTION CALL
+                            sprites[1].draw[0](renderingContext);
+                        }
 
                         // Clean up.
                         renderingContext.restore();

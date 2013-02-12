@@ -8,6 +8,8 @@
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
+
+        //Drawings for character Link
         linkCloseFeet = function (renderingContext) {
             renderingContext.save();
             //Hat
@@ -224,108 +226,6 @@
 
         linkSeparatedFeet = function (renderingContext) {
             renderingContext.save();
-            //Hat
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 1;
-            renderingContext.moveTo(5,0);
-            renderingContext.lineTo(0, 5);
-            renderingContext.lineTo(0, 10);
-            renderingContext.lineTo(2.5,7.5);
-            renderingContext.lineTo(5, 10);
-            renderingContext.lineTo(5, 10.5);
-            renderingContext.lineTo(7.5, 15);
-            renderingContext.lineTo(12.5, 15);
-            renderingContext.lineTo(17.5, 2.5);
-            renderingContext.lineTo(15, 0);
-            renderingContext.lineTo(5, 0);
-            renderingContext.fillStyle = "rgba(69, 139,0 , 1)";
-            renderingContext.stroke();
-            renderingContext.fill();
-
-            //Face
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 1;
-            renderingContext.moveTo(10,5);
-            renderingContext.lineTo(15, 10);
-            renderingContext.lineTo(22.5, 5);
-            renderingContext.lineTo(22.5, 10);
-            renderingContext.lineTo(25,10);
-            renderingContext.lineTo(22.5, 17.5);
-            renderingContext.lineTo(15, 17.5);
-            renderingContext.lineTo(10, 12.5);
-            renderingContext.lineTo(10,5);
-            renderingContext.fillStyle = "rgba(255,211,155, 1)";
-            renderingContext.stroke();
-            renderingContext.fill();
-           
-            //Eye
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 0;
-            renderingContext.moveTo(20,10);
-            renderingContext.lineTo(18, 10);
-            renderingContext.lineTo(18, 7.5);
-            renderingContext.lineTo(20, 7.5);
-            renderingContext.lineTo(20,10);
-            renderingContext.fillStyle = "rgba(0, 0,0 , 0.8)";
-            renderingContext.stroke();
-            renderingContext.fill();
-
-            //Hair
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 1;
-            renderingContext.moveTo(20,0);
-            renderingContext.lineTo(12.5, 7.5);
-            renderingContext.lineTo(15, 10);
-            renderingContext.lineTo(25, 5);
-            renderingContext.lineTo(20,0);
-            renderingContext.fillStyle = "rgba(255, 215, 0 , 1)";
-            renderingContext.stroke();
-            renderingContext.fill();
-
-            //Body
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 1;
-            renderingContext.moveTo(22.5,17.5);
-            renderingContext.lineTo(22.5, 25);
-            renderingContext.lineTo(7.5, 25);
-            renderingContext.lineTo(7.5, 17.5);
-            renderingContext.lineTo(22.5, 17.5);
-            renderingContext.fillStyle = "rgba(69, 139,0 , 1)";
-            renderingContext.stroke();
-            renderingContext.fill(); 
-
-            //Hand
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 1;
-            renderingContext.moveTo(15,17.5);
-            renderingContext.lineTo(15, 22.5);
-            renderingContext.lineTo(17.5, 22.5);
-            renderingContext.lineTo(17.5, 17.7);
-            renderingContext.lineTo(15,17.5);
-            renderingContext.fillStyle = "rgba(255,211,155, 1)";
-            renderingContext.stroke();
-            renderingContext.fill(); 
-
-            //Shield
-            renderingContext.beginPath();  
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = 0;
-            renderingContext.moveTo(5,15);
-            renderingContext.lineTo(15, 15);
-            renderingContext.lineTo(15, 22.5);
-            renderingContext.lineTo(10, 25);
-            renderingContext.lineTo(5,22.5);
-            renderingContext.lineTo(5,15);
-            renderingContext.fillStyle = "rgba(148,148,148, 1)";
-            renderingContext.stroke();
-            renderingContext.fill();
-
             //shoes separated
             renderingContext.beginPath();  
             renderingContext.lineWidth = 1;
