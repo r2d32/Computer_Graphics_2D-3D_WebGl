@@ -445,7 +445,7 @@
                         frame: 90,
                         tx: 220,
                         ty: 180,
-                        ease: KeyframeTweener.cubeEaseIn
+                        ease: KeyframeTweener.linear
                     },
 
                     // The last keyframe does not need an easing function.
@@ -472,6 +472,7 @@
                         frame: 150,
                         tx: 225,
                         ty: 130,
+                        ease: KeyframeTweener.elasticOut
           
                     },
 
@@ -481,6 +482,7 @@
                         ty: 50,
                         sx: 0.1,
                         sy: 0.1,
+                        ease: KeyframeTweener.elasticOut
                     }
                 ]
             }

@@ -3,7 +3,7 @@
  * canvas elements.
  */
 var KeyframeTweener = {
-    // The module comes with a library of common easing functions.
+    // Library of common easing functions.
     linear: function (currentTime, start, distance, duration) {
         var percentComplete = currentTime / duration;
         return distance * percentComplete + start;
@@ -24,6 +24,29 @@ var KeyframeTweener = {
         return (percentComplete < 1) ?
                 (distance / 2) * percentComplete * percentComplete + start :
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
+    },
+
+    elasticOut: function(currentTime, start, distance, duration) {
+        var amplitude = 10;
+        var period = 40;
+        var overshoot;
+
+        if (currentTime === 0) {
+            return start;
+        } else if ((currentTime = currentTime / duration) === 1) {
+            return start + distance;
+        } else {
+            if ( !(period != null) ) {
+                period = duration * 0.3;
+            }
+            if (!(amplitude != null) || amplitude < Math.abs(distance)) {
+                amplitude = distance;
+                overshoot = period / 4;
+            } else {
+                overshoot = period / (2 * Math.PI) * Math.asin(distance / amplitude);
+            }
+        return (amplitude * Math.pow(2, -10 * currentTime)) * Math.sin((currentTime * duration - overshoot) * (2 * Math.PI) / period) + distance + start;
+        }
     },
     // The big one: animation initialization.  The settings parameter
     // is expected to be a JavaScript object with the following
@@ -55,7 +78,7 @@ var KeyframeTweener = {
     // Initialization primarily calls setInterval on a custom-built
     // frame-drawing (and updating) function.
     initialize: function (settings) {
-        // We need to keep track of the current frame.
+        // Keep track of the current frame.
         var currentFrame = 0,
 
             // Avoid having to go through settings to get to the
