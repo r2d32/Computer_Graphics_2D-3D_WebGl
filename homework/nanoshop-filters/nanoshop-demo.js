@@ -3,6 +3,7 @@
  * filter on a canvas drawing.
  */
 (function () {
+
     var canvas = $("#picture")[0],
         renderingContext = canvas.getContext("2d"),
         gradient;
@@ -48,20 +49,40 @@
     renderingContext.lineTo(435, 265);
     renderingContext.fill();
     renderingContext.closePath();
-    // (end of adapted code by Tyler Nichols)
-
-    // Set a little event handler to apply the filter.
-    $("#apply-filter-button").click(function () {
-        // Filter time.
+    // Event handler to apply the sepia filter.
+    $("#apply-sepiaFilter-button").click(function () {
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                // This is a basic "darkener."
                 function (r, g, b, a) {
-                    return [r / 2, g / 2, b / 2, a];
+                    r = r * 0.393 + g * 0.769 + b * 0.189;
+                    g = r * 0.349 + g * 0.686 + b * 0.168;
+                    b = r * 0.272 + g * 0.534 + b * 0.131;
+                    return [r, g, b, a];
                 }
             ),
             0, 0
         );
     });
+
+
+    //Event handler to apply the noise filter.
+    $("#apply-noiseFilter-button").click(function () {
+        renderingContext.putImageData(
+            Nanoshop.applyFilter(
+                renderingContext.getImageData(0, 0, canvas.width, canvas.height),
+                function (r, g, b, a) {                    
+                    r = r + noise(30);
+                    g = g + noise(30);
+                    b = b + noise(30);
+                    return [r, g, b, a];
+                }
+            ),
+            0, 0
+        );
+    });
+    // calculate random noise
+    function noise(noiseValue) {
+        return Math.floor((noiseValue >> 1) - (Math.random() * noiseValue));
+    }
 }());
