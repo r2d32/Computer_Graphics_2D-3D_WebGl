@@ -26,6 +26,7 @@ var KeyframeTweener = {
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
     },
 
+    // JD: This one looks particularly fun.
     elasticOut: function(currentTime, start, distance, duration) {
         var amplitude = 10;
         var period = 40;
@@ -48,6 +49,7 @@ var KeyframeTweener = {
         return (amplitude * Math.pow(2, -10 * currentTime)) * Math.sin((currentTime * duration - overshoot) * (2 * Math.PI) / period) + distance + start;
         }
     },
+
     // The big one: animation initialization.  The settings parameter
     // is expected to be a JavaScript object with the following
     // properties:
@@ -112,6 +114,11 @@ var KeyframeTweener = {
                 currentTweenFrame,
                 duration;
 
+            // JD: Oops---this is a major breakage of separation of concerns.
+            //     By hardcoding your background in here, KeyframeTweener has
+            //     ceased to be a reusable library.  This should be passed in
+            //     as part of the settings.
+            //
             // Calls an Image for the canvas and repaints it every frame
             img = new Image();
             img.src = 'dungeon.png';
@@ -162,7 +169,14 @@ var KeyframeTweener = {
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
 
-                        // Draws the corresponding sprite depending on the sequence 
+                        // Draws the corresponding sprite depending on the sequence
+
+                        // JD: This is functionally correct, but again breaks the reusability
+                        //     of this library.  The ideal way to do this is to find some
+                        //     representation of this that can be included as part of the
+                        //     sprite.  When done in this way, then the first sprite in any
+                        //     scene will change its internal appearance exactly according
+                        //     to these rules, all the time.
                         if ( i == 0 ){
                             if (currentFrame < 91) {
 
@@ -190,9 +204,14 @@ var KeyframeTweener = {
                                 sprites[0].draw[0](renderingContext);
                             }
                         }
+                        // JD: Meanwhile, this block makes the second sprite of any scene
+                        //     forever have a single internal frame ever.
                         if(i==1){
                             sprites[1].draw[0](renderingContext);
                         }
+                        // JD: ...and finally, with no other code here, did you realize that
+                        //     scenes using KeyframeTweener can't possibly have more than
+                        //     two sprites now?
 
                         // Clean up.
                         renderingContext.restore();
