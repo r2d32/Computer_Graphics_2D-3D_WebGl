@@ -54,12 +54,7 @@
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                function (r, g, b, a) {
-                    r = r * 0.393 + g * 0.769 + b * 0.189;
-                    g = r * 0.349 + g * 0.686 + b * 0.168;
-                    b = r * 0.272 + g * 0.534 + b * 0.131;
-                    return [r, g, b, a];
-                }
+                Nanoshop.sepiaFilter
             ),
             0, 0
         );
@@ -71,18 +66,9 @@
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                function (r, g, b, a) {                    
-                    r = r + noise(30);
-                    g = g + noise(30);
-                    b = b + noise(30);
-                    return [r, g, b, a];
-                }
+                Nanoshop.noiseFilter
             ),
             0, 0
         );
     });
-    // calculate random noise
-    function noise(noiseValue) {
-        return Math.floor((noiseValue >> 1) - (Math.random() * noiseValue));
-    }
 }());

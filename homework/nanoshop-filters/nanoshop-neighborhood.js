@@ -15,7 +15,9 @@ var NanoshopNeighborhood = {
             rgbaNeighborhood[4].a
         ];
     },
-
+    /*
+     * A basic "greyscale filter function"
+     */    
     greyscale: function (rgbaNeighborhood) {
         var greysvaleValue = (rgbaNeighborhood[4].r * 0.21) + (rgbaNeighborhood[4].g * 0.71) + (rgbaNeighborhood[4].b * 0.07);
         var greyscaleOpacity = 0.6;
@@ -26,17 +28,21 @@ var NanoshopNeighborhood = {
             rgbaNeighborhood[4].a * greyscaleOpacity
         ];
     },
+    /*
+     * A basic "posterize filter function"
+     */
     posterize: function (rgbaNeighborhood) {
         var numLevels = Math.max(2,Math.min(256, 4));
         var numAreas = 256 / numLevels;
         var numValues = 256 / (numLevels-1);
         var r = numValues * ((rgbaNeighborhood[4].r/ numAreas)>>0);
-                    var g = numValues * ((rgbaNeighborhood[4].g / numAreas)>>0);
-                    var b = numValues * ((rgbaNeighborhood[4].b / numAreas)>>0);
+        var g = numValues * ((rgbaNeighborhood[4].g / numAreas)>>0);
+        var b = numValues * ((rgbaNeighborhood[4].b / numAreas)>>0);
 
-                    if (r > 255) r = 255;
-                    if (g > 255) g = 255;
-                    if (b > 255) b = 255;
+        if (r > 255) r = 255;
+        if (g > 255) g = 255;
+        if (b > 255) b = 255;
+
         return [
             r,
             g,

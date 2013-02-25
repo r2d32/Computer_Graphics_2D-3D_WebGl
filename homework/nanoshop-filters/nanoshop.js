@@ -26,5 +26,24 @@ var Nanoshop = {
         }
 
         return imageData;
-    }
+    },
+    //Filter that creates a sepia effect on the image
+    sepiaFilter: function (r, g, b, a) {
+        r = r * 0.393 + g * 0.769 + b * 0.189;
+        g = r * 0.349 + g * 0.686 + b * 0.168;
+        b = r * 0.272 + g * 0.534 + b * 0.131;
+        return [r, g, b, a];
+    },
+    //Filter that creates a noise effect on the image
+    noiseFilter: function (r, g, b, a) {                    
+        r = r + Nanoshop.noise(30);
+        g = g + Nanoshop.noise(30);
+        b = b + Nanoshop.noise(30);
+        return [r, g, b, a];
+    },
+    // calculate random noise for the filter
+    noise: function(noiseValue) {
+        return Math.floor((noiseValue >> 1) - (Math.random() * noiseValue));
+    },
+
 };
