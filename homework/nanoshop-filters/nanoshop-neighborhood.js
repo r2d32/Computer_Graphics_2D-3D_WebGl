@@ -35,29 +35,49 @@ var NanoshopNeighborhood = {
             }
         }
         bTotal = ( bTotal / 3  > 255 ) ? 255 : bTotal;
-        return [ (rTotal / 3 )*0.9 , (gTotal / 3) *0.9  , (bTotal / 3) * 5 , aTotal/3];
+        return [ (rTotal / 3 )*0.9 , (gTotal / 3) *0.9  , (bTotal / 3) * 5 , aTotal/3];}, 
+     /*
+     * A basic "greyscale filter function"
+     */
+    // JD: These filters are certainly functional, but they miss the
+    //     point of being *neighborhood* filters---the resulting color
+    //     is based solely on the pixel at that location, and not affected
+    //     by any of the other pixels around it.
+    //
+    //     If you were following the darkener example, note how the
+    //     comments say that this was for example only.  You should have
+    //     gone for something closer to the averager filter; filters like
+    //     that were the intent of this assignment.
+    greyscale: function (rgbaNeighborhood) {
+        var greysvaleValue = (rgbaNeighborhood[4].r * 0.21) + (rgbaNeighborhood[4].g * 0.71) + (rgbaNeighborhood[4].b * 0.07);
+        var greyscaleOpacity = 0.6;
+        return [
+            greysvaleValue,
+            greysvaleValue,
+            greysvaleValue,
+            rgbaNeighborhood[4].a * greyscaleOpacity
+        ];
     },
     /*
      * A basic "posterize filter function"
      */
-    posterize: function (rgbaNeighborhood) {
-        var numLevels = Math.max(2,Math.min(256, 4));
-        var numAreas = 256 / numLevels;
-        var numValues = 256 / (numLevels-1);
-        var r = numValues * ((rgbaNeighborhood[4].r/ numAreas)>>0);
-        var g = numValues * ((rgbaNeighborhood[4].g / numAreas)>>0);
-        var b = numValues * ((rgbaNeighborhood[4].b / numAreas)>>0);
+    horizontalBlur : function (rgbaNeighborhood) {
+        var rTotal = 0,
+            gTotal = 0,
+            bTotal = 0,
+            aTotal = 0,
+            i;
 
-        if (r > 255) r = 255;
-        if (g > 255) g = 255;
-        if (b > 255) b = 255;
-
-        return [
-            r,
-            g,
-            b,
-            rgbaNeighborhood[4].a 
-        ];
+        
+        for (i = 0; i < 9; i += 1) {
+            if ( i == 1 || i == 4 || i==7 ){
+                rTotal += rgbaNeighborhood[i].r;
+                gTotal += rgbaNeighborhood[i].g;
+                bTotal += rgbaNeighborhood[i].b;
+                aTotal += rgbaNeighborhood[i].a;
+            }
+        }
+        return [ (rTotal / 3 ), (gTotal / 3), (bTotal / 3), aTotal/3];
     },
     /*
      * A basic "averager"---this one returns the average of all the pixels in the
