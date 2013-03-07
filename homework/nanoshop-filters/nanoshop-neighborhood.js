@@ -16,17 +16,26 @@ var NanoshopNeighborhood = {
         ];
     },
     /*
-     * A basic "greyscale filter function"
+     * A filter that applies a blued diagonal blur to the image
      */    
-    greyscale: function (rgbaNeighborhood) {
-        var greysvaleValue = (rgbaNeighborhood[4].r * 0.21) + (rgbaNeighborhood[4].g * 0.71) + (rgbaNeighborhood[4].b * 0.07);
-        var greyscaleOpacity = 0.6;
-        return [
-            greysvaleValue,
-            greysvaleValue,
-            greysvaleValue,
-            rgbaNeighborhood[4].a * greyscaleOpacity
-        ];
+    blueDiagonalBlur: function (rgbaNeighborhood) {
+        var rTotal = 0,
+            gTotal = 0,
+            bTotal = 0,
+            aTotal = 0,
+            i;
+
+        
+        for (i = 0; i < 9; i += 1) {
+            if ( i == 2 || i == 4 || i==6 ){
+                rTotal += rgbaNeighborhood[i].r;
+                gTotal += rgbaNeighborhood[i].g;
+                bTotal += rgbaNeighborhood[i].b;
+                aTotal += rgbaNeighborhood[i].a;
+            }
+        }
+        bTotal = ( bTotal / 3  > 255 ) ? 255 : bTotal;
+        return [ (rTotal / 3 )*0.9 , (gTotal / 3) *0.9  , (bTotal / 3) * 5 , aTotal/3];
     },
     /*
      * A basic "posterize filter function"

@@ -94,13 +94,13 @@
             0, 0
         );
     });
-    $("#apply-greyscale-button").click(function () {
+    $("#apply-blueDiagonalBlur-button").click(function () {
         // Filter time.
         renderingContext.putImageData(
             NanoshopNeighborhood.applyFilter(
                 renderingContext,
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                NanoshopNeighborhood.greyscale
+                NanoshopNeighborhood.blueDiagonalBlur
                 //NanoshopNeighborhood.averager // Convenience comment for easy switching.
             ),
             0, 0
