@@ -252,6 +252,10 @@ var Primitives = {
 
         color = color || [0, 0, 0];
         while (true) {
+            // JD: dash > 0 *and* dash > 1???  Isn't that just dash > 1?
+            //     Note also that you can take advantage of truthiness in
+            //     JavaScript to make the last condition shorter (if you
+            //     can't see how, ask me sometime).
             if (dash > 0 && dash > 1 && ( currentLength % (dash + 1) ) > 0 ){
                 this.setPixel(context, x, y, color[0], color[1], color[2]);
             }

@@ -17,7 +17,16 @@ var NanoshopNeighborhood = {
     },
     /*
      * A basic "greyscale filter function"
-     */    
+     */
+    // JD: These filters are certainly functional, but they miss the
+    //     point of being *neighborhood* filters---the resulting color
+    //     is based solely on the pixel at that location, and not affected
+    //     by any of the other pixels around it.
+    //
+    //     If you were following the darkener example, note how the
+    //     comments say that this was for example only.  You should have
+    //     gone for something closer to the averager filter; filters like
+    //     that were the intent of this assignment.
     greyscale: function (rgbaNeighborhood) {
         var greysvaleValue = (rgbaNeighborhood[4].r * 0.21) + (rgbaNeighborhood[4].g * 0.71) + (rgbaNeighborhood[4].b * 0.07);
         var greyscaleOpacity = 0.6;
@@ -39,8 +48,8 @@ var NanoshopNeighborhood = {
         var g = numValues * ((rgbaNeighborhood[4].g / numAreas)>>0);
         var b = numValues * ((rgbaNeighborhood[4].b / numAreas)>>0);
 
-        if (r > 255) r = 255;
-        if (g > 255) g = 255;
+        if (r > 255) r = 255; // JD: How about r = (r > 255) ? 255 : r;
+        if (g > 255) g = 255; //     (same with g and b)
         if (b > 255) b = 255;
 
         return [
