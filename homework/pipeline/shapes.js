@@ -32,8 +32,8 @@ var Shapes = {
      */
     sphere: function () {
         // These variables are actually "constants" for the sphere.
-        var moduloSides= 6,
-            moduloNumber = 7,
+        var moduloSides= 6,   // JD: You can afford more slices---at this size,
+            moduloNumber = 7, //     the sphere isn't that convincing yet.
             moduloSize,
             currentRadious,
             radius,
@@ -78,6 +78,13 @@ var Shapes = {
         return {
             vertices: v,
 
+            // JD: Yikes!  This is quite inflexible.  Are you sure you couldn't
+            //     find a way to compute these as well?
+            //
+            //     Further, you are not using the mesh consistently---each index
+            //     array is supposed to represent a *face* on the object.  With
+            //     your representation, you are restricted to line segments.
+            //     You won't be able to render a solid sphere!
             indices: [
                 [ 0,1,0,2,0,3,0,4,0,5,0,6],
                 [ 1,2 ,3 ,4 ,5 ,6  ],
@@ -121,6 +128,8 @@ var Shapes = {
 
             vertices: a,
 
+            // JD: Same problem here as your sphere---these should be *faces*
+            //     on your object, not line segments.
             indices: [
                 [ 0, 1, 2, 3, 4, 5, 0 ],
                 [6,0],
@@ -149,13 +158,16 @@ var Shapes = {
             b[i] =  [[Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ],[ Ycenter ],
                     [ Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ]];
 
-            b[ i + numberOfSides ] = [ b[i][0], Yheight, b[i][2] ] 
+            b[ i + numberOfSides ] = [ b[i][0], Yheight, b[i][2] ] // JD: A missing semicolon???  Really???
         }
+             // JD: OK, now this type of indentation is just not acceptable at this
+             //     level anymore.
              b[6] = [ b[0][0], Yheight, b[0][2] ];
         return {
 
             vertices: b,
 
+            // JD: Ditto these indices.
             indices: [
                 [ 0, 1, 2, 3, 4, 5, 0 ],
                 [6, 0],
