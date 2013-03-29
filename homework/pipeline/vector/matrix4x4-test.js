@@ -2,22 +2,7 @@
  * Unit tests for our matrix4x4 object.
  */
 $(function () {
-    /*test("Creation and Data Access", function () {
-        var m = [ 1, 0, 0, 0,
-                  0, 1, 0, 0,
-                  0, 0, 1, 0,
-                  0, 0, 0, 1 ];
 
-        equal(m,creatematrix, "Matrix4x4 size");
-
-
-         var m = new Matrix4x4(1,0,0,0,
-                           0,1,0,0,
-                           0,0,1,0,
-                           0,0,0,1);
-
-        equal(m.dimensions(), 8, "Matrix4x4 size");
-*/
 
     // This suite checks instantiation basics.
     test("Creation and Data Access", function () {
@@ -29,6 +14,7 @@ $(function () {
 
         equal(m.dimensions(), 16, "Matrix4x4 size");
         equal(m2.dimensions(), 16, "Matrix4x4 size");
+
       
     });
     
@@ -40,6 +26,18 @@ $(function () {
 
 
         equal(m.conversion(),"1000010002100001" , "Matrix4x4 conversion ");
+      
+    });  
+  
+    test("WebGL Conversion", function () {
+        var m = new Matrix4x4( 1, 0, 0, 0,
+                               0, 1, 2, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1);
+        var m2 = new Matrix4x4();
+
+
+        equal(m2.multiply(m), m.elements, "Matrix4x4 size");
       
     });
         

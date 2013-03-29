@@ -283,15 +283,15 @@ var Primitives = {
      */
     plotCirclePoints: function (context, xc, yc, x, y, color) {
         color = color || [0, 0, 0];
-        color1 = [0,0,200];
-        color2 = [0,200,0];
-        color3 = [0,200,200];
-        color4 = [200,0,0];
-        color5 = [200,0,200];
-        color6 = [200,200,0];
+        color1 = [  0,  0,200];
+        color2 = [  0,200,  0];
+        color3 = [  0,200,200];
+        color4 = [200,  0,  0];
+        color5 = [200,  0,200];
+        color6 = [200,200,  0];
         color7 = [200,200,200];
         var distance = (yc-y); 
-        this.setPixel(context, xc + x, yc + y, color[0], color[1], color[2]);
+        this.setPixel(context, xc + x, yc + y,  color[0],  color[1],  color[2]);
         this.setPixel(context, xc + x, yc - y, color1[0], color1[1], color1[2]);
         this.setPixel(context, xc + y, yc + x, color2[0], color2[1], color2[2]);
         this.setPixel(context, xc + y, yc - x, color3[0], color3[1], color3[2]);
@@ -302,13 +302,12 @@ var Primitives = {
         this.setPixel(context, xc - x, yc - y, color5[0], color5[1], color5[2]);
         this.setPixel(context, xc - x, yc + y, color4[0], color4[1], color4[2]);        
 
-      //  for (i = (yc+y); i > distance; i -= 1) {
-        //    this.setPixel(context, xc-x, i, color1[0], color1[1], color1[2]);
-        //}
-
-        //for (i = (yc+x); i >( yc-x ); i -= 1) {
-          //  this.setPixel(context, xc-y, i, color1[0], color1[1], color1[2]);
-    //    }
+        for (i = (yc+x); i >( yc-x ); i -= 1) {
+            this.setPixel(context, xc-y, i, color1[0], color1[1], color1[2]);
+            color1[0] += 1;
+            color1[1] += 1;
+            color1[2] += 1;
+        }
 
         var boundries  = { quarter: [ xc - x, yc - y, yc + y ] };
  

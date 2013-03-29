@@ -21,18 +21,59 @@ var Matrix4x4 = (function () {
             this.elements = [ 1, 0, 0, 0,
                               0, 1, 0, 0,
                               0, 0, 1, 0,
-                              0, 0, 0, 1];
+                              0, 0, 0, 1]; 
         }
 
     },
     
         // A private method for checking dimensions,
         // throwing an exception when different.
-        checkDimensions = function (m1) {
-            if (m1.dimensions() !== 16) {
-                throw "Matri should be 4x4";
+    checkDimensions = function (m1) {
+        if (m1.dimensions() !== 16) {
+            throw "Matri should be 4x4";
+        }
+    };
+    
+    ortho = function( l, r, bottom, top, zNear, zFar){
+        var width = r - l,
+            height = top - bottom,
+            depth = zFar - zNear;
+
+        return new Matrix4x4 (
+            2.0/width,   0.0,          0.0,        -(r + l)/width,
+            0.0,         2.0/height,   0.0,        -(top+bottom)/height,
+            0.0,         0.0,         -2.0/depth,  -(zFar+zNear)/depth,
+            0.0,         0.0,          0.0,         1.0);
+    };
+
+    matrix4x4.prototype.multiply = function (b) {
+        var c = new Matrix4x4();
+        var column = [ 0, 1, 2, 3,
+                       0, 1, 2, 3,      
+                       0, 1, 2, 3,
+                       0, 1, 2, 3  ],
+
+            row = [ 0, 0, 0, 0,
+                    1, 1, 1, 1,
+                    2, 2, 2, 2,
+                    3, 3, 3, 3 ],
+            product = 0,
+            e,
+            i;
+
+        for(i = 0; i < 16; i += 1){
+
+            for(e = 0; e < 4; e +=1){
+                product += b.elements[ (e * 4 + column[i]) ] * this.elements[ (row[i] * 4 + e) ];
+                console.log('('+row[i] +',' + column[i]+')');
             }
-        };
+            console.log('product'+ product);
+            c.elements[i] = product;
+            product = 0;
+            
+        }
+        return c;
+    };
 
     // Basic methods.
     matrix4x4.prototype.dimensions = function () {
@@ -47,13 +88,14 @@ var Matrix4x4 = (function () {
         for (i = 0; i < rows; i += 1) {
             for (e = 0; e < rows; e += 1) {
                 changed+= [ this.elements[ e * rows + i ]];
-            console.log('here '+ changed);
+            console.log('here'+ changed);
             }
             
         }
         this.elements = changed;
         return changed;
     };
+    
 
 
 
@@ -122,17 +164,6 @@ var Matrix4x4 = (function () {
     };
 
     // Scalar multiplication and division.
-    matrix4x4.prototype.multiply = function (s) {
-        var result = new Matrix4x4(),
-            i,
-            max;
-
-        for (i = 0, max = this.dimensions(); i < max; i += 1) {
-            result.elements[i] = this.elements[i] * s;
-        }
-
-        return result;
-    };
 
     matrix4x4.prototype.divide = function (s) {
         var result = new Matrix4x4(),
