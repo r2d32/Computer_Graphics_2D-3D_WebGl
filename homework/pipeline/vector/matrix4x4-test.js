@@ -1,6 +1,7 @@
 /*
  * Unit tests for our matrix4x4 object.
  */
+
 $(function () {
 
 
@@ -18,7 +19,7 @@ $(function () {
       
     });
     
-    test("WebGL Conversion", function () {
+    test("MAtrix to WebGL Conversion", function () {
         var m = new Matrix4x4( 1, 0, 0, 0,
                                0, 1, 2, 0,
                                0, 0, 1, 0,
@@ -29,7 +30,7 @@ $(function () {
       
     });  
   
-    test("WebGL Conversion", function () {
+    test("Matrix Multiplication ", function () {
         var m = new Matrix4x4( 1, 0, 0, 0,
                                0, 1, 2, 0,
                                0, 0, 1, 0,
@@ -37,9 +38,47 @@ $(function () {
         var m2 = new Matrix4x4();
 
 
-        equal(m2.multiply(m), m.elements, "Matrix4x4 size");
+        assert.deepEqual(m2.multiply(m), m, "Matrix4x4 size");
       
     });
+
+    test("Matrix Scale ", function () {
+        var m5 = new Matrix4x4(1, 0, 0, 0,
+                               0, 1, 2, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1);
+
+        assert.deepEqual(m5.scale(2,3,4),[2, 0, 0, 0,
+                                          0, 3, 2, 0,
+                                          0, 0, 4, 0,
+                                          0, 0, 0, 1],'Matrix scale');
+      
+    });
+    test("Matrix Translate", function () {
+        var m5 = new Matrix4x4(1, 0, 0, 0,
+                               0, 1, 2, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1);
+
+        assert.deepEqual(m5.translate(2,3,4),[1, 0, 0, 2,
+                                              0, 1, 2, 3,
+                                              0, 0, 1, 4,
+                                              0, 0, 0, 1],'Matrix translate');
+      
+    });
+    test("Matrix Rotate", function () {
+        var m5 = new Matrix4x4(1, 0, 0, 0,
+                               0, 1, 2, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1);
+
+        assert.deepEqual(m5.rotate(30),[ Math.cos(30), -Math.sin(30), 0, 0,
+                                         Math.sin(30),  Math.cos(30), 2, 0,
+                                         0,             0,            1, 0,
+                                         0,             0,            0, 1],'Matrix rotate');
+      
+    });
+
         
         
     

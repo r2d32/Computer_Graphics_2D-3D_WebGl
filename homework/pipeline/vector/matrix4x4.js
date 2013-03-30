@@ -95,156 +95,34 @@ var Matrix4x4 = (function () {
         this.elements = changed;
         return changed;
     };
+
+    //Scaling matrix method 
+    matrix4x4.prototype.scale = function (sx,sy,sz){
+                    
+        this.elements[0] = this.elements[0]*sx;
+        this.elements[5] = this.elements[5]*sy;
+        this.elements[10] = this.elements[10]*sz;
+
+        return this.elements;
+    };
+
+    matrix4x4.prototype.translate = function (dx,dy,dz){
+                    
+        this.elements[3] = dx;
+        this.elements[7] = dy;
+        this.elements[11] = dz;
+
+        return this.elements;
+    };
     
+    matrix4x4.prototype.rotate = function (angle){
+                    
+        this.elements[0] = Math.cos(angle);
+        this.elements[1] = -Math.sin(angle);
+        this.elements[4] = Math.sin(angle);
+        this.elements[5] = Math.cos(angle);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    matrix4x4.prototype.x = function () {
-        return this.elements[0];
-    };
-
-    matrix4x4.prototype.y = function () {
-        return this.elements[1];
-    };
-
-    matrix4x4.prototype.z = function () {
-        return this.elements[2];
-    };
-
-    matrix4x4.prototype.w = function () {
-        return this.elements[3];
-    };
-
-    // Addition and subtraction.
-    matrix4x4.prototype.add = function (m) {
-        var result = new Matrix4x4(),
-            i,
-            max;
-
-        // Dimensionality check.
-        checkDimensions(this, m);
-
-        for (i = 0, max = this.dimensions(); i < max; i += 1) {
-            result.elements[i] = this.elements[i] + m.elements[i];
-        }
-
-        return result;
-    };
-
-    matrix4x4.prototype.subtract = function (m) {
-        var result = new Matrix4x4(),
-            i,
-            max;
-
-        // Dimensionality check.
-        checkDimensions(this, m);
-
-        for (i = 0, max = this.dimensions(); i < max; i += 1) {
-            result.elements[i] = this.elements[i] - m.elements[i];
-        }
-
-        return result;
-    };
-
-    // Scalar multiplication and division.
-
-    matrix4x4.prototype.divide = function (s) {
-        var result = new Matrix4x4(),
-            i,
-            max;
-
-        for (i = 0, max = this.dimensions(); i < max; i += 1) {
-            result.elements[i] = this.elements[i] / s;
-        }
-
-        return result;
-    };
-
-    // Dot product.
-    matrix4x4.prototype.dot = function (m) {
-        var result = 0,
-            i,
-            max;
-
-        // Dimensionality check.
-        checkDimensions(this, m);
-
-        for (i = 0, max = this.dimensions(); i < max; i += 1) {
-            result += this.elements[i] * m.elements[i];
-        }
-
-        return result;
-    };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Cross product.
-    matrix4x4.prototype.cross = function (m) {
-        // This method is for 3D vectors only.
-        if (this.dimensions() !== 3 || m.dimensions() !== 3) {
-            throw "Cross product is for 3D vectors only.";
-        }
-
-        // With 3D vectors, we can just return the result directly.
-        return new Matrix4x4(
-            (this.y() * m.z()) - (this.z() * m.y()),
-            (this.z() * m.x()) - (this.x() * m.z()),
-            (this.x() * m.y()) - (this.y() * m.x())
-        );
-    };
-
-    // Magnitude and unit matrix4x4.
-    matrix4x4.prototype.magnitude = function () {
-        // Make use of the dot product.
-        return Math.sqrt(this.dot(this));
-    };
-
-    matrix4x4.prototype.unit = function () {
-        // At this point, we can leverage our more "primitive" methods.
-        return this.divide(this.magnitude());
-    };
-
-    // Projection.
-    matrix4x4.prototype.projection = function (m) {
-        var unitv;
-
-        // Dimensionality check.
-        checkDimensions(this, m);
-
-        // Plug and chug :)
-        // The projection of u onto m is u dot the unit matrix4x4 of m
-        // times the unit matrix4x4 of m.
-        unitv = m.unit();
-        return unitv.multiply(this.dot(unitv));
+        return this.elements;
     };
 
     return matrix4x4;
