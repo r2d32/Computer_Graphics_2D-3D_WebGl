@@ -34,15 +34,15 @@ var Matrix4x4 = (function () {
         }
     };
     
-    ortho = function( l, r, bottom, top, zNear, zFar){
+    matrix4x4.prototype.ortho = function(l, r, b, t, n, f){
         var width = r - l,
-            height = top - bottom,
-            depth = zFar - zNear;
+            height = t - b,
+            depth = f - n;
 
         return new Matrix4x4 (
             2.0/width,   0.0,          0.0,        -(r + l)/width,
-            0.0,         2.0/height,   0.0,        -(top+bottom)/height,
-            0.0,         0.0,         -2.0/depth,  -(zFar+zNear)/depth,
+            0.0,         2.0/height,   0.0,        -(t+b)/height,
+            0.0,         0.0,         -2.0/depth,  -(f+n)/depth,
             0.0,         0.0,          0.0,         1.0);
     };
 
@@ -93,7 +93,7 @@ var Matrix4x4 = (function () {
             
         }
         this.elements = changed;
-        return changed;
+        return this.elements;
     };
 
     //Scaling matrix method 
@@ -124,6 +124,20 @@ var Matrix4x4 = (function () {
 
         return this.elements;
     };
+
+    matrix4x4.prototype.frustum = function(l,r,b,t,n,f){
+
+        this.elements[0]  = 2 * n / (r - l);
+        this.elements[2]  = (r + l) / (r - l);
+        this.elements[5]  = 2 * n / (t - b);
+        this.elements[6]  = (t + b) / (t - b);
+        this.elements[10] = -(f + n) / (f - n);
+        this.elements[11] = -(2 * f * n) / (f - n);
+        this.elements[14] = -1;
+        this.elements[15] = 0;
+
+        return this.elements;
+    }
 
     return matrix4x4;
 })();
