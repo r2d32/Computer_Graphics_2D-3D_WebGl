@@ -282,7 +282,7 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, color) {
-        color = color || [0, 0, 0];
+        color = color || [0, 0, 0]; // JD: You will want to parameterize this later on.
         color1 = [  0,  0,200];
         color2 = [  0,200,  0];
         color3 = [  0,200,200];
@@ -304,20 +304,33 @@ var Primitives = {
 
         for (i = (yc+x); i >( yc-x ); i -= 1) {
             this.setPixel(context, xc-y, i, color1[0], color1[1], color1[2]);
-            color1[0] += 1;
-            color1[1] += 1;
-            color1[2] += 1;
-        }
+            color1[0] += 1; // JD: This should not be a hardcoded increment---
+            color1[1] += 1; //     remember it will vary depending on the color!
+            color1[2] += 1; //     Calculate the delta based on the "difference"
+        }                   //     between the colors and the radius of the circle.
 
         var boundries  = { quarter: [ xc - x, yc - y, yc + y ] };
- 
+        // JD: This one is not clear to me; I don't know what your
+        //     intent is here.  I get how, for the others, you use
+        //     the different colors to mark out the octants.
+        //     This one, not so much.
         for ( quarter in boundries) {
             for (i = boundries.quarter[2]; i > boundries.quarter[1]; i -= 1) {
                 this.setPixel(context, boundries.quarter[0], i, color1[0], color1[1], color1[2]);
             }
         }
 
-
+        // JD: Overall, you want to pattern your code after the first loop
+        //     that you wrote.  That one has the right idea.  Just keep track,
+        //     carefully, of what area this loop covers.  You can devise other
+        //     loops to cover the remaining areas.  (hint: you will end up with
+        //     4 total---8 / 2, see?)
+        //
+        //     Remember that your colors should change at the same rate---you are
+        //     doing a linear gradient after all.  So, your other issue is figuring
+        //     out what the correct increment is.  I can tell you that it combines
+        //     the radius/diameter and the "distance" between the two colors.
+        //     Look at the rectangle gradient code above for some hints.
         this.setPixel(context, xc - y, yc - x, color7[0], color7[1], color7[2]);
         this.setPixel(context, xc - y, yc + x, color6[0], color6[1], color6[2]);
     },
