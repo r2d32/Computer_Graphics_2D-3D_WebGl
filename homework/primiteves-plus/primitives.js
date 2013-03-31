@@ -256,7 +256,7 @@ var Primitives = {
             //     Note also that you can take advantage of truthiness in
             //     JavaScript to make the last condition shorter (if you
             //     can't see how, ask me sometime).
-            if (dash > 0 && dash > 1 && ( currentLength % (dash + 1) ) > 0 ){
+            if (dash > 1 && ( currentLength % (dash + 1) ) > 0 ){
                 this.setPixel(context, x, y, color[0], color[1], color[2]);
             }
 
@@ -282,57 +282,40 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, color) {
-        color = color || [0, 0, 0]; // JD: You will want to parameterize this later on.
-        color1 = [  0,  0,200];
-        color2 = [  0,200,  0];
-        color3 = [  0,200,200];
-        color4 = [200,  0,  0];
-        color5 = [200,  0,200];
-        color6 = [200,200,  0];
-        color7 = [200,200,200];
-        var distance = (yc-y); 
-        this.setPixel(context, xc + x, yc + y,  color[0],  color[1],  color[2]);
-        this.setPixel(context, xc + x, yc - y, color1[0], color1[1], color1[2]);
-        this.setPixel(context, xc + y, yc + x, color2[0], color2[1], color2[2]);
-        this.setPixel(context, xc + y, yc - x, color3[0], color3[1], color3[2]);
-
-
-
-
-        this.setPixel(context, xc - x, yc - y, color5[0], color5[1], color5[2]);
-        this.setPixel(context, xc - x, yc + y, color4[0], color4[1], color4[2]);        
-
+        color = color || [0, 0, 200]; 
+        //var colorBase1 = color,
+        //    colorBase2 = color,
+        //    colorTop = colorTop || [0,200,0], being colorTop an argument
+        // I tried to implement it the commented out
+        // way, but it didnt work. So this is what I got 
+        // got working so far:
+        var colorBase1 = [0,0,200],
+            colorBase2 = [0,0,200],
+            colorTop = [0,200,0],
+            diameter = 180,
+            colorChange = [(color[0] - colorTop[0]) / diameter,
+                      (color[1] - colorTop[1]) / diameter,
+                      (color[2] - colorTop[2]) / diameter];
+        
+        x = Math.round(x);
+        y = Math.round(y);
+        
+        for (i = (yc+y); i >( yc-y ); i -= 1) {
+            this.setPixel(context, xc-x, i, colorBase1[0], colorBase1[1], colorBase1[2]);
+            this.setPixel(context, xc+x, i, colorBase1[0], colorBase1[1], colorBase1[2]);
+            colorBase1[0] -= colorChange[0];
+            colorBase1[1] -= colorChange[1];
+            colorBase1[2] -= colorChange[2];        
+        } 
+        
         for (i = (yc+x); i >( yc-x ); i -= 1) {
-            this.setPixel(context, xc-y, i, color1[0], color1[1], color1[2]);
-            color1[0] += 1; // JD: This should not be a hardcoded increment---
-            color1[1] += 1; //     remember it will vary depending on the color!
-            color1[2] += 1; //     Calculate the delta based on the "difference"
-        }                   //     between the colors and the radius of the circle.
+            this.setPixel(context, xc-y, i, colorBase2[0], colorBase2[1], colorBase2[2]);
+            this.setPixel(context, xc+y, i, colorBase2[0], colorBase2[1], colorBase2[2]);
+            colorBase2[0] -= colorChange[0];
+            colorBase2[1] -= colorChange[1];
+            colorBase2[2] -= colorChange[2];
+        }   
 
-        var boundries  = { quarter: [ xc - x, yc - y, yc + y ] };
-        // JD: This one is not clear to me; I don't know what your
-        //     intent is here.  I get how, for the others, you use
-        //     the different colors to mark out the octants.
-        //     This one, not so much.
-        for ( quarter in boundries) {
-            for (i = boundries.quarter[2]; i > boundries.quarter[1]; i -= 1) {
-                this.setPixel(context, boundries.quarter[0], i, color1[0], color1[1], color1[2]);
-            }
-        }
-
-        // JD: Overall, you want to pattern your code after the first loop
-        //     that you wrote.  That one has the right idea.  Just keep track,
-        //     carefully, of what area this loop covers.  You can devise other
-        //     loops to cover the remaining areas.  (hint: you will end up with
-        //     4 total---8 / 2, see?)
-        //
-        //     Remember that your colors should change at the same rate---you are
-        //     doing a linear gradient after all.  So, your other issue is figuring
-        //     out what the correct increment is.  I can tell you that it combines
-        //     the radius/diameter and the "distance" between the two colors.
-        //     Look at the rectangle gradient code above for some hints.
-        this.setPixel(context, xc - y, yc - x, color7[0], color7[1], color7[2]);
-        this.setPixel(context, xc - y, yc + x, color6[0], color6[1], color6[2]);
     },
 
     // First, the most naive possible implementation: circle by trigonometry.

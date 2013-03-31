@@ -102,7 +102,8 @@ $(function () {
             2.0/width,   0.0,          0.0,        -(r + l)/width,
             0.0,         2.0/height,   0.0,        -(t+b)/height,
             0.0,         0.0,         -2.0/depth,  -(f+n)/depth,
-            0.0,         0.0,          0.0,         1.0),'Matrix Ortho');
+            0.0,         0.0,          0.0,         1.0),
+                'Matrix Ortho');
        
     });
 
