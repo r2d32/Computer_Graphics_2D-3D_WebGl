@@ -13,6 +13,7 @@ $(function () {
                                0, 0, 0, 1);
         var m2 = new Matrix4x4();
 
+        // JD: These test size; how about content?
         equal(m.dimensions(), 16, "Matrix4x4 size");
         equal(m2.dimensions(), 16, "Matrix4x4 size");
 
@@ -25,7 +26,11 @@ $(function () {
                                0, 0, 1, 0,
                                0, 0, 0, 1);
 
-
+        // JD: Related to my comment regarding this function
+        //     in matrix4x4.js, I don't understand the string
+        //     result.  This is certainly not in a form that
+        //     WebGL will take, so I am really not sure about
+        //     your intention with this function.
         equal(m.conversion(),"1000010002100001" , "Matrix4x4 conversion ");
       
     });  
@@ -37,7 +42,10 @@ $(function () {
                                0, 0, 0, 1);
         var m2 = new Matrix4x4();
 
-
+        // JD: This is fine to have, but note that it is the trivial
+        //     case (i.e., multiplication by the identity matrix).
+        //     You'll want some more general cases too.  Plus you have
+        //     the wrong test message.
         assert.deepEqual(m2.multiply(m), m, "Matrix4x4 size");
       
     });
@@ -48,6 +56,15 @@ $(function () {
                                0, 0, 1, 0,
                                0, 0, 0, 1);
 
+        // JD: This is incorrect (see my note in matrix4x4.js).  If the
+        //     intent is to scale m5 by 2 on x, 3 on y, and 4 on z, the
+        //     correct result is
+        //
+        //       2 0 0 0
+        //       0 3 6 0
+        //       0 0 4 0
+        //       0 0 0 1
+        //
         assert.deepEqual(m5.scale(2,3,4),[2, 0, 0, 0,
                                           0, 3, 2, 0,
                                           0, 0, 4, 0,
@@ -74,6 +91,8 @@ $(function () {
                                0, 0, 1, 0,
                                0, 0, 0, 1);
 
+        // JD: Incorrect again.  This is not the product of the rotation
+        //     matrix and m5.
         assert.deepEqual(m5.rotate(30),[ Math.cos(30), -Math.sin(30), 0, 0,
                                          Math.sin(30),  Math.cos(30), 2, 0,
                                          0,             0,            1, 0,
@@ -98,6 +117,13 @@ $(function () {
             height = t - b,
             depth = f - n;
 
+        // JD: This is technically correct, but is not in
+        //     the spirit of test-driven development.  You're
+        //     merely duplicating the code here from ortho; if
+        //     there is a bug in the ortho function, then that
+        //     but will be replicated here.  Instead, you are
+        //     expected *to know the full answer beforehand*,
+        //     and to simply spell that out as a literal.
         assert.deepEqual(m5.ortho(l, r, b, t, n, f),new Matrix4x4(
             2.0/width,   0.0,          0.0,        -(r + l)/width,
             0.0,         2.0/height,   0.0,        -(t+b)/height,
@@ -119,6 +145,7 @@ $(function () {
             n = 5, 
             f = 6;
 
+        // JD: Same comment here as above.
         assert.deepEqual(m5.frustum(l,r,b,t,n,f),
                             [ (2 * n / (r - l)),                  0,   ((r + l) / (r - l)),                         0,
                                               0,  (2 * n / (t - b)),   ((t + b) / (t - b)),                         0,

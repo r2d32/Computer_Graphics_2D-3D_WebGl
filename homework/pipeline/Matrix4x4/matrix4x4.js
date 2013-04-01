@@ -79,7 +79,10 @@ var Matrix4x4 = (function () {
     matrix4x4.prototype.dimensions = function () {
         return this.elements.length;
     };
-        
+
+    // JD: I'm not clear on what this is supposed to do, especially
+    //     in light of what your unit test produces.  A little
+    //     header comment will help.
     matrix4x4.prototype.conversion = function (){
         var changed = [],
             i,
@@ -96,7 +99,33 @@ var Matrix4x4 = (function () {
         return this.elements;
     };
 
-    //Scaling matrix method 
+    // JD: Careful here---the way you implement these matrices
+    //     implies to me that you might not fully understand how
+    //     to use them.  Remember that the transformations
+    //     themselves are formed in well-defined ways: they
+    //     are not based on some pre-existing matrix.  This is
+    //     why, in class, I implement those in a manner that is
+    //     similar to a static method in Java.
+    //
+    //     These standalone matrices are then *multiplied* to
+    //     other matrices or to a vertex in order to "execute"
+    //     the transformation.  This is the other alternative
+    //     for these transforms: form the standalone matrix then
+    //     multiply it with a pre-existing one.
+    //
+    //     The issue with your implementations is that they do
+    //     neither.  Instead, they do some direct assignments to
+    //     the elements of a pre-existing matrix.  These are thus
+    //     not the "standalone" version, nor are they the correct
+    //     way to perform multiplication.  I strongly suggest that
+    //     you pay close attention to upcoming classes in order to
+    //     ensure that you are understanding this correctly.
+    //
+    //     Note, for example, the difference between ortho up top,
+    //     and the implementations you have below.  ortho does the
+    //     "standalone matrix" approach correctly.
+
+    //Scaling matrix method
     matrix4x4.prototype.scale = function (sx,sy,sz){
                     
         this.elements[0] = this.elements[0]*sx;
@@ -114,7 +143,10 @@ var Matrix4x4 = (function () {
 
         return this.elements;
     };
-    
+
+    // JD: Note, this is not general rotation, but rotation about
+    //     the z-axis.  The rotation matrix in the sample code is
+    //     much more general.
     matrix4x4.prototype.rotate = function (angle){
                     
         this.elements[0] = Math.cos(angle);
