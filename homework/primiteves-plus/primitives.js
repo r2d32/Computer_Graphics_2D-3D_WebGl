@@ -289,6 +289,17 @@ var Primitives = {
         // I tried to implement it the commented out
         // way, but it didnt work. So this is what I got 
         // got working so far:
+        //
+        // JD 0402: Was the code above *all* the code that you had when
+        //     trying to turn the colors into parameters?  Because the
+        //     above was all there was (including in primitives-demo.js),
+        //     then that clearly doesn't work because colorTop would be
+        //     undefined.
+        //
+        //     Commit and push the *exact* and *complete* attempt to
+        //     have color parameters and I will look at that (we will
+        //     accept for this purpose that you are committing broken
+        //     code).
         var colorBase1 = [0,0,200],
             colorBase2 = [0,0,200],
             colorTop = [0,200,0],

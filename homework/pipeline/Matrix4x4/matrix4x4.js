@@ -84,6 +84,9 @@ var Matrix4x4 = (function () {
     //     in light of what your unit test produces.  A little
     //     header comment will help.
     // Preparation of matrix for consumption by WebGL and GLSL
+    //
+    // JD 0402: OK, this is better.  Last time you were returning
+    //     a string.
     matrix4x4.prototype.conversion = function (){
         var changed = [],
             i,
@@ -154,7 +157,12 @@ var Matrix4x4 = (function () {
 
     // Matrix rotation
     matrix4x4.prototype.rotate = function (angle){
-                    
+        // JD: This is looking better, but remember:
+        //     - 30 should, of course, be replaced with the angle parameter.
+        //
+        //     - This is rotation about the z-axis, not general-purpose 3D
+        //       rotation about any axis.  That rotation is provided in the
+        //       sample code, and should be transferred here.
         var rotated = new Matrix4x4(Math.cos(30), -Math.sin(30), 0, 0,
                                     Math.sin(30),  Math.cos(30), 0, 0,
                                     0,             0,            1, 0,
