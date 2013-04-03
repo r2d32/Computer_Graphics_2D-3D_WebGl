@@ -13,40 +13,41 @@ $(function () {
                                0, 0, 0, 1);
         var m2 = new Matrix4x4();
 
-        // JD: These test size; how about content?
+
         equal(m.dimensions(), 16, "Matrix4x4 size");
         equal(m2.dimensions(), 16, "Matrix4x4 size");
 
       
     });
     
-    test("MAtrix to WebGL Conversion", function () {
-        var m = new Matrix4x4( 1, 0, 0, 0,
-                               0, 1, 2, 0,
-                               0, 0, 1, 0,
+    test("Matrix to WebGL Conversion", function () {
+        var m = new Matrix4x4( 1, 0, 3, 0,
+                               0, 1, 2, 5,
+                               0, 9, 1, 0,
                                0, 0, 0, 1);
 
-        // JD: Related to my comment regarding this function
-        //     in matrix4x4.js, I don't understand the string
-        //     result.  This is certainly not in a form that
-        //     WebGL will take, so I am really not sure about
-        //     your intention with this function.
-        equal(m.conversion(),"1000010002100001" , "Matrix4x4 conversion ");
+        assert.deepEqual(m.conversion(),[1, 0, 0, 0,
+                                         0, 1, 9, 0,
+                                         3, 2, 1, 0,
+                                         0, 5, 0, 1], "Matrix4x4 conversion ");
       
     });  
   
     test("Matrix Multiplication ", function () {
-        var m = new Matrix4x4( 1, 0, 0, 0,
+        var m = new Matrix4x4( 1, 4, 6, 0,
                                0, 1, 2, 0,
-                               0, 0, 1, 0,
+                               9, 0, 1, 0,
                                0, 0, 0, 1);
-        var m2 = new Matrix4x4();
 
-        // JD: This is fine to have, but note that it is the trivial
-        //     case (i.e., multiplication by the identity matrix).
-        //     You'll want some more general cases too.  Plus you have
-        //     the wrong test message.
-        assert.deepEqual(m2.multiply(m), m, "Matrix4x4 size");
+        var m2 = new Matrix4x4(1, 4, 3, 3,
+                               0, 5, 5, 0,
+                               3, 0, 9, 0,
+                               32 ,0, 4, 4);
+
+        assert.deepEqual(m2.multiply(m), new Matrix4x4( 28,   8,  17, 3,
+                                                        45,   5,  15, 0,
+                                                        84,  12,  27, 0,
+                                                        68, 128, 196, 4), "Matrix4x4 multiplication");
       
     });
 
@@ -65,38 +66,37 @@ $(function () {
         //       0 0 4 0
         //       0 0 0 1
         //
-        assert.deepEqual(m5.scale(2,3,4),[2, 0, 0, 0,
-                                          0, 3, 2, 0,
-                                          0, 0, 4, 0,
-                                          0, 0, 0, 1],'Matrix scale');
+        // why is m6 a 6 instead of an 8 ?
+        assert.deepEqual(m5.scale(2,3,4),new Matrix4x4(2, 0, 0, 0,
+                                                       0, 3, 8, 0,
+                                                       0, 0, 4, 0,
+                                                       0, 0, 0, 1),'Matrix scale');
       
     });
 
     test("Matrix Translate", function () {
-        var m5 = new Matrix4x4(1, 0, 0, 0,
+        var m5 = new Matrix4x4(1, 4, 0, 0,
                                0, 1, 2, 0,
-                               0, 0, 1, 0,
+                               0, 1, 1, 0,
                                0, 0, 0, 1);
 
-        assert.deepEqual(m5.translate(2,3,4),[1, 0, 0, 2,
-                                              0, 1, 2, 3,
-                                              0, 0, 1, 4,
-                                              0, 0, 0, 1],'Matrix translate');
+        assert.deepEqual(m5.translate(2,3,4),new Matrix4x4(1, 4, 0, 2,
+                                                           0, 1, 2, 3,
+                                                           0, 1, 1, 4,
+                                                           0, 0, 0, 1),'Matrix translate');
       
     });
 
     test("Matrix Rotate", function () {
         var m5 = new Matrix4x4(1, 0, 0, 0,
-                               0, 1, 2, 0,
-                               0, 0, 1, 0,
-                               0, 0, 0, 1);
+                               0, 5, 2, 0,
+                               0, 6, 1, 0,
+                               0, 3, 0, 1);
 
-        // JD: Incorrect again.  This is not the product of the rotation
-        //     matrix and m5.
-        assert.deepEqual(m5.rotate(30),[ Math.cos(30), -Math.sin(30), 0, 0,
-                                         Math.sin(30),  Math.cos(30), 2, 0,
-                                         0,             0,            1, 0,
-                                         0,             0,            0, 1],'Matrix rotate');
+        assert.deepEqual(m5.rotate(30),new Matrix4x4(0.15425144988758405,  0.9880316240928618, 0, 0,
+                                                      -4.940158120464309,  0.7712572494379202, 2, 0,
+                                                      -5.928189744557171,  0.9255086993255043, 1, 0,
+                                                     -2.9640948722785856,  0.46275434966275214,0, 1),'Matrix rotate');
       
     });
 
@@ -113,22 +113,11 @@ $(function () {
             b =5,
             n =6;
 
-        var width = r - l,
-            height = t - b,
-            depth = f - n;
-
-        // JD: This is technically correct, but is not in
-        //     the spirit of test-driven development.  You're
-        //     merely duplicating the code here from ortho; if
-        //     there is a bug in the ortho function, then that
-        //     but will be replicated here.  Instead, you are
-        //     expected *to know the full answer beforehand*,
-        //     and to simply spell that out as a literal.
         assert.deepEqual(m5.ortho(l, r, b, t, n, f),new Matrix4x4(
-            2.0/width,   0.0,          0.0,        -(r + l)/width,
-            0.0,         2.0/height,   0.0,        -(t+b)/height,
-            0.0,         0.0,         -2.0/depth,  -(f+n)/depth,
-            0.0,         0.0,          0.0,         1.0),
+            -0.6666666666666666,                    0,                   0,  1.6666666666666667,
+                              0,  -0.6666666666666666,                   0,  2.3333333333333335,
+                              0,                    0,  0.6666666666666666,                   3,
+                              0,                    0,                   0,                   1),
                 'Matrix Ortho');
        
     });
@@ -145,14 +134,10 @@ $(function () {
             n = 5, 
             f = 6;
 
-        // JD: Same comment here as above.
-        assert.deepEqual(m5.frustum(l,r,b,t,n,f),
-                            [ (2 * n / (r - l)),                  0,   ((r + l) / (r - l)),                         0,
-                                              0,  (2 * n / (t - b)),   ((t + b) / (t - b)),                         0,
-                                              0,                  0, ( -(f + n) / (f - n)),  (-(2 * f * n) / (f - n)),
-                                              0,                  0,                    -1,                        0],
-                                                'Matrix Frustum');
-      
+        assert.deepEqual(m5.frustum(l,r,b,t,n,f),new Matrix4x4(10, 0,  3,  0,
+                                                                0,10,  7,  0,
+                                                                0, 0,-11,-60,
+                                                                0, 0, -1,  0),'Matrix Frustum');
     });
 
 

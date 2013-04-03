@@ -22,6 +22,8 @@
         currentRotation = 0.0,
         currentInterval,
         rotationMatrix,
+        // HW
+        projectionMatrix,
         vertexPosition,
         vertexColor,
 
@@ -138,12 +140,13 @@
         {
             color: { r: 0.0, g: 0.5, b: 0.0 },
             vertices: Shapes.toRawLineArray(Shapes.pencilTip()),
+            
             mode: gl.LINES
         },
         {
             color: { r: 0.0, g: 0.5, b: 0.0 },
             vertices: Shapes.toRawLineArray(Shapes.pencilBody()),
-            mode: gl.LINES
+            mode: gl.LINES,//gl.LINES
         },
         {
             color: { r: 0.0, g: 0.5, b: 0.0 },
@@ -222,11 +225,40 @@
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
+    //HW
+    //projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
+    //ortho(arguments).conversionConvenience();
 
     /*
      * Displays an individual object.
      */
     drawObject = function (object) {
+
+
+
+        for(var e = 0; e < object.vertices.length;e++ ){
+            if(object.vertices[e]!= undefined && object.vertices[e].constructor === Array){
+                console.log("e : "+ e);
+            }else{
+                    console.log(")))))))))))))))))))))) "+ e);
+            }
+    
+        }/*
+        
+
+        console.log(((object.vertices[0]) instanceof Array)+"i");
+        console.log((object.mode) instanceof Array);
+        console.log((object.buffer) instanceof Array);
+
+        if ((object.vertices[]) instanceof Array)
+
+        var child =  {
+            color: ((object.colorBuffer) instanceof Array)?  object.colorBuffer[i] : object.colorBuffer,
+            vertices: object.vertices[i],
+            mode: object.mode[i],
+            buffer: GLSLUtilities.initVertexBuffer(gl,object.vertices[i]);
+        };*/
+
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
@@ -255,6 +287,13 @@
         // All done.
         gl.flush();
     };
+
+    // HW: Set up the ortho prokjection matrix
+   // gl.uniformMatrix4fv( projectionMatrix,
+     //   gl.FALSE, new Float32Array(
+       //     Matrix4x4.ortho(-150 150 -150 15- 5 10000).convert()
+        //)
+    //);
 
     // Draw the initial scene.
     drawScene();

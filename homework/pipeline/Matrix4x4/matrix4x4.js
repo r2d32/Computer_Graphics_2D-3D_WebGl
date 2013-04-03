@@ -34,6 +34,8 @@ var Matrix4x4 = (function () {
         }
     };
     
+    //HW change this methods into 
+    // ortho = funcion()
     matrix4x4.prototype.ortho = function(l, r, b, t, n, f){
         var width = r - l,
             height = t - b,
@@ -65,9 +67,7 @@ var Matrix4x4 = (function () {
 
             for(e = 0; e < 4; e +=1){
                 product += b.elements[ (e * 4 + column[i]) ] * this.elements[ (row[i] * 4 + e) ];
-                console.log('('+row[i] +',' + column[i]+')');
             }
-            console.log('product'+ product);
             c.elements[i] = product;
             product = 0;
             
@@ -83,15 +83,18 @@ var Matrix4x4 = (function () {
     // JD: I'm not clear on what this is supposed to do, especially
     //     in light of what your unit test produces.  A little
     //     header comment will help.
+    // Preparation of matrix for consumption by WebGL and GLSL
     matrix4x4.prototype.conversion = function (){
         var changed = [],
             i,
             e,
+            changedIndex = 0,
             rows = 4; 
+
         for (i = 0; i < rows; i += 1) {
             for (e = 0; e < rows; e += 1) {
-                changed+= [ this.elements[ e * rows + i ]];
-            console.log('here'+ changed);
+                changed[changedIndex]= this.elements[ e * rows + i ];
+                changedIndex+=1;
             }
             
         }
@@ -125,50 +128,55 @@ var Matrix4x4 = (function () {
     //     and the implementations you have below.  ortho does the
     //     "standalone matrix" approach correctly.
 
-    //Scaling matrix method
+    //  Scaling matrix method
     matrix4x4.prototype.scale = function (sx,sy,sz){
+        var scalator = new Matrix4x4(sx, 0, 0, 0,
+                                      0,sy, 0, 0,
+                                      0, 0, sz,0,
+                                      0, 0, 0, 1);
                     
-        this.elements[0] = this.elements[0]*sx;
-        this.elements[5] = this.elements[5]*sy;
-        this.elements[10] = this.elements[10]*sz;
+        
 
-        return this.elements;
+        return this.multiply(scalator);
     };
 
+    // Traslating matrix method
     matrix4x4.prototype.translate = function (dx,dy,dz){
-                    
-        this.elements[3] = dx;
-        this.elements[7] = dy;
-        this.elements[11] = dz;
+        var translated = new Matrix4x4();
+        translated.elements = this.elements;    
+        translated.elements[3] = dx;
+        translated.elements[7] = dy;
+        translated.elements[11] = dz;
 
-        return this.elements;
+        return translated;
     };
 
-    // JD: Note, this is not general rotation, but rotation about
-    //     the z-axis.  The rotation matrix in the sample code is
-    //     much more general.
+
+    // Matrix rotation
     matrix4x4.prototype.rotate = function (angle){
                     
-        this.elements[0] = Math.cos(angle);
-        this.elements[1] = -Math.sin(angle);
-        this.elements[4] = Math.sin(angle);
-        this.elements[5] = Math.cos(angle);
+        var rotated = new Matrix4x4(Math.cos(30), -Math.sin(30), 0, 0,
+                                    Math.sin(30),  Math.cos(30), 0, 0,
+                                    0,             0,            1, 0,
+                                    0,             0,            0, 1);
 
-        return this.elements;
+        return this.multiply(rotated);
     };
-
+    
+    // Matrix frustum perspective
     matrix4x4.prototype.frustum = function(l,r,b,t,n,f){
+        var fm = new Matrix4x4();
+        fm.elements = this.elements;
+        fm.elements[0]  = 2 * n / (r - l);
+        fm.elements[2]  = (r + l) / (r - l);
+        fm.elements[5]  = 2 * n / (t - b);
+        fm.elements[6]  = (t + b) / (t - b);
+        fm.elements[10] = -(f + n) / (f - n);
+        fm.elements[11] = -(2 * f * n) / (f - n);
+        fm.elements[14] = -1;
+        fm.elements[15] = 0;
 
-        this.elements[0]  = 2 * n / (r - l);
-        this.elements[2]  = (r + l) / (r - l);
-        this.elements[5]  = 2 * n / (t - b);
-        this.elements[6]  = (t + b) / (t - b);
-        this.elements[10] = -(f + n) / (f - n);
-        this.elements[11] = -(2 * f * n) / (f - n);
-        this.elements[14] = -1;
-        this.elements[15] = 0;
-
-        return this.elements;
+        return fm;
     }
 
     return matrix4x4;

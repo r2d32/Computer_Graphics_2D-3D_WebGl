@@ -126,11 +126,11 @@ var Shapes = {
 
         return {
 
-            vertices: a,
+            vertices: [a,a],
 
             // JD: Same problem here as your sphere---these should be *faces*
             //     on your object, not line segments.
-            indices: [
+            indices: [[
                 [ 0, 1, 2, 3, 4, 5, 0 ],
                 [6,0],
                 [6,1],
@@ -138,7 +138,15 @@ var Shapes = {
                 [6,3],
                 [6,4],
                 [6,5],
-            ]
+            ], [
+                [ 0, 1, 2, 3, 4, 5, 0 ],
+                [6,0],
+                [6,1],
+                [6,2],
+                [6,3],
+                [6,4],
+                [6,5],
+            ]]
         };
     },
     /*
