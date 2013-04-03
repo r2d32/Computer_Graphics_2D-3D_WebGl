@@ -30,6 +30,65 @@ var Shapes = {
     /*
      * Returns the vertices for a sphere.
      */
+    sphere2: function() {
+        var i,
+            j,
+            x,
+            y,
+            radius = 0.5,
+            theta = Math.PI,
+            phi = 2 * Math.PI,
+            latitude = 20,
+            longitude = 20,
+            currentLatitude,
+            currentLongitude,
+            currentVertex,
+            currentIndex,
+            vertices = [],
+            indices = [],
+            newStructure = {};
+
+
+
+        //Build vertices
+        for (i = 0; i < (latitude + 1); i += 1) {
+            currentLatitude = i * theta / latitude;
+            for (j = 0; j < (longitude + 1); j += 1) {
+                currentVertex = latitude * i + j;
+
+                vertices[currentVertex] = [];
+                currentLongitude = j * phi / longitude;
+
+                vertices[currentVertex][0] = radius * Math.sin(currentLatitude) * Math.cos(currentLongitude);
+                vertices[currentVertex][1] = radius * Math.cos(currentLatitude);
+                vertices[currentVertex][2] = radius * Math.sin(currentLatitude) * Math.sin(currentLongitude);
+                console.log(vertices.length+" vertices");
+            }
+        }
+
+        // Build indices
+        for (x = 0; x < (latitude + 1); x += 1) {
+            for (y= 0; y < (longitude + 1); y += 1) {
+                currentIndex = 2 * ((latitude + 1) * x + y);
+
+                indices[2 * ((latitude + 1) * x + y)] = [];
+                indices[2 * ((latitude + 1) * x + y) + 1] = [];
+
+                indices[currentIndex][0] = longitude * x + y;
+                indices[currentIndex][1] = longitude * x + y + 1;
+                indices[currentIndex][2] = longitude * (x + 1) + y;
+                currentIndex += 1;
+                indices[currentIndex][0] = longitude * (x + 1) + y;
+                indices[currentIndex][1] = longitude * (x + 1) + y + 1;
+                indices[currentIndex][2] = longitude * x + y + 1;
+                console.log(indices.length+" indices");
+            }
+        }
+
+        newStructure.vertices = vertices;
+        newStructure.indices = indices;
+        return newStructure;
+    },
     sphere: function () {
         // These variables are actually "constants" for the sphere.
         var moduloSides= 6,   // JD: You can afford more slices---at this size,

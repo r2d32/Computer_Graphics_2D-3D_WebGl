@@ -138,11 +138,10 @@
             mode: gl.TRIANGLES
         },
         {
-            color: { r: 0.0, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.pencilTip()),
-            
+            color: { r: 1.0, g: 0.5, b: 0.0 },
+            vertices: Shapes.toRawLineArray(Shapes.sphere2()),
             mode: gl.LINES
-        },
+        }/*,
         {
             color: { r: 0.0, g: 0.5, b: 0.0 },
             vertices: Shapes.toRawLineArray(Shapes.pencilBody()),
@@ -165,7 +164,7 @@
             color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
             mode: gl.TRIANGLES
-        }
+        }*/
     ];
 
     // Pass the vertices to WebGL.
@@ -235,7 +234,7 @@
     drawObject = function (object) {
 
 
-
+/*
         for(var e = 0; e < object.vertices.length;e++ ){
             if(object.vertices[e]!= undefined && object.vertices[e].constructor === Array){
                 console.log("e : "+ e);
@@ -243,7 +242,7 @@
                     console.log(")))))))))))))))))))))) "+ e);
             }
     
-        }/*
+        }
         
 
         console.log(((object.vertices[0]) instanceof Array)+"i");
