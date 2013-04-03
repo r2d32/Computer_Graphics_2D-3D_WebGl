@@ -67,6 +67,24 @@ $(function () {
         //       0 0 0 1
         //
         // why is m6 a 6 instead of an 8 ?
+        //
+        // JD 0402: When you apply a transform to a pre-existing transform,
+        //          you are multiplying that transform on the left side:
+        //
+        //       2 0 0 0     1 0 0 0
+        //       0 3 0 0  x  0 1 2 0
+        //       0 0 4 0     0 0 1 0
+        //       0 0 0 1     0 0 0 1
+        //
+        //     So, for 2nd row, 3rd column of the product, you get:
+        //
+        //                       0
+        //       0 3 0 0  x      2
+        //                       1
+        //                       0
+        //
+        //     ...which is 0*0 + 3*2 + 0*1 + 0*0 = 6
+        //
         assert.deepEqual(m5.scale(2,3,4),new Matrix4x4(2, 0, 0, 0,
                                                        0, 3, 8, 0,
                                                        0, 0, 4, 0,
