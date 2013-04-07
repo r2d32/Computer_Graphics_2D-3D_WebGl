@@ -39,6 +39,8 @@
         j,
         maxj,
 
+        // JD: This function really should go away, now that you
+        //     have its equivalent in your Matrix4x4 library.
         /*
          * This code does not really belong here: it should live
          * in a separate library of matrix and transformation
