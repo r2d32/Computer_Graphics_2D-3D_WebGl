@@ -22,8 +22,8 @@
         currentRotation = 0.0,
         currentInterval,
         rotationMatrix,
-        // HW
-        projectionMatrix,
+        //HW
+        // Projection matrix
         vertexPosition,
         vertexColor,
 
@@ -39,7 +39,7 @@
         j,
         maxj,
 
-        // JD: This function really should go away, now that you
+       // JD: This function really should go away, now that you
         //     have its equivalent in your Matrix4x4 library.
         /*
          * This code does not really belong here: it should live
@@ -128,34 +128,39 @@
 
     // Build the objects to display.
     objectsToDraw = [
+        
 
+        //{
+          //  color: { r: 0.0, g: 0.5, b: 0.0 },
+            //vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
+            //mode: gl.LINES
+        //}, 
 
         {
-            color: { r: 0.0, g: 1.0, b: 0 },
-            vertices: [].concat(
-                [ 0.25, 0.0, -0.5 ],
-                [ 0.75, 0.0, -0.5 ],
-                [ 0.25, 0.5, -0.5 ]
-            ),
-            mode: gl.TRIANGLES
-        },
-        {
-            color: { r: 0.0, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.pencilTip()),
-            mode: gl.LINES
-        },
-        {
-            color: { r: 0.0, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.pencilBody()),
-            mode: gl.LINES,//gl.LINES
-        },
-        {
-            color: { r: 0.0, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.sphere()),
-            mode: gl.LINES
+            color: {r: 1, g: 0, b: 0},
+            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+            mode: gl.TRIANGLES,
         },
 
-        // JD: See how the pyramid works as both wireframe and solid?
+        {
+            color: {r: 1, g: 0.84, b: 0},
+            vertices: Shapes.toRawTriangleArray(Shapes.pencilBody()),
+            mode: gl.TRIANGLES,
+        },
+        {
+            color: {r: 0, g: 0, b: 0},
+            vertices: Shapes.toRawTriangleArray(Shapes.pencilBody()),
+            mode: gl.LINES,
+        },
+
+        {
+
+            color: {r:0.98, g: 0.98, b:0.98},
+            vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
+            mode: gl.TRIANGLES,
+        },
+
+      // JD: See how the pyramid works as both wireframe and solid?
         //     *That's* how your polygon meshes should work.
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },
@@ -226,7 +231,7 @@
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
-    //HW
+        //HW
     //projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
     //ortho(arguments).conversionConvenience();
 
@@ -234,9 +239,7 @@
      * Displays an individual object.
      */
     drawObject = function (object) {
-
-
-/*
+        /*
         for(var e = 0; e < object.vertices.length;e++ ){
             if(object.vertices[e]!= undefined && object.vertices[e].constructor === Array){
                 console.log("e : "+ e);
@@ -259,7 +262,6 @@
             mode: object.mode[i],
             buffer: GLSLUtilities.initVertexBuffer(gl,object.vertices[i]);
         };*/
-
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
@@ -288,13 +290,12 @@
         // All done.
         gl.flush();
     };
-
     // HW: Set up the ortho prokjection matrix
-   // gl.uniformMatrix4fv( projectionMatrix,
-     //   gl.FALSE, new Float32Array(
-       //     Matrix4x4.ortho(-150 150 -150 15- 5 10000).convert()
-        //)
-    //);
+    // gl.uniformMatrix4fv( projectionMatrix,
+    //     gl.FALSE, new Float32Array(
+    //         Matrix4x4.ortho(-150 150 -150 15- 5 10000).convert()
+    //    )
+    // );
 
     // Draw the initial scene.
     drawScene();

@@ -118,7 +118,7 @@ var Shapes = {
      */
     pencilTip: function () {
 
-        var numberOfSides = 20,
+        var numberOfSides = 40,
             size = 0.3,
             Xcenter = 0,
             Ycenter = -0.2,
@@ -129,8 +129,8 @@ var Shapes = {
         //This creates the first 6 coordinates of the vertices array that represent an hexagon
         for (var i = 0; i <= numberOfSides;i += 1) {
             // JD: Why is this vertex an array of arrays?
-            v[i] =  [[Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ],[ Ycenter ],
-                    [ Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ]];
+            v[i] =  [Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ,Ycenter ,
+                     Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ];
         }
         //This adds the tip coordinate at the end of the array 
         v[numberOfSides] = [ Xcenter,Yheight,Zcenter ]; 
@@ -171,7 +171,7 @@ var Shapes = {
      */
     pencilBody: function () {
 
-        var numberOfSides = 20,
+        var numberOfSides = 10,
             size = 0.3,
             Xcenter = 0,
             Ycenter = 0.75,
@@ -187,8 +187,8 @@ var Shapes = {
             //     elements of the v array with different data types.  The
             //     first line assigns an array of arrays.  The next line
             //     assigns a plain array.  What exactly is your intent here?
-            v[i] =  [[Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ],[ Ycenter ],
-                    [ Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ]];
+            v[i] =  [Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) , Ycenter ,
+                     Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ];
 
             v[ i + numberOfSides ] = [ v[i][0], Yheight, v[i][2] ];
         }
