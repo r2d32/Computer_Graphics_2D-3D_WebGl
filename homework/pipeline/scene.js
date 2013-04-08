@@ -128,40 +128,31 @@
 
     // Build the objects to display.
     objectsToDraw = [
-        
-
-        //{
-          //  color: { r: 0.0, g: 0.5, b: 0.0 },
-            //vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
-            //mode: gl.LINES
-        //}, 
-
+         
         {
             color: {r: 1, g: 0, b: 0},
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.TRIANGLES,
-        },
-
-        {
-            color: {r: 1, g: 0.84, b: 0},
-            vertices: Shapes.toRawTriangleArray(Shapes.pencilBody()),
-            mode: gl.TRIANGLES,
-        },
-        {
-            color: {r: 0, g: 0, b: 0},
-            vertices: Shapes.toRawTriangleArray(Shapes.pencilBody()),
             mode: gl.LINES,
         },
-
         {
 
             color: {r:0.98, g: 0.98, b:0.98},
             vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
             mode: gl.TRIANGLES,
+
+            chidStructure: {
+                color: {r:1, g: 0.84, b:0},
+                vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
+                mode: gl.TRIANGLES,
+                
+                chidStructure: {
+                    color: {r:0, g: 0, b:0},
+                    vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
+                    mode: gl.LINES,
+                },
+            },
         },
 
-      // JD: See how the pyramid works as both wireframe and solid?
-        //     *That's* how your polygon meshes should work.
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },
             vertices: Shapes.toRawLineArray(Shapes.pyramid()),
@@ -170,7 +161,7 @@
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
-            mode: gl.TRIANGLES
+            mode: gl.LINES
         }
     ];
 
@@ -236,40 +227,50 @@
     //ortho(arguments).conversionConvenience();
 
     /*
+     * Passes substructure objects to WebGL
+     */
+    passToWebGL = function (child){
+
+        child.buffer = GLSLUtilities.initVertexBuffer(gl,
+                child.vertices);
+
+        if (!child.colors) {
+            // If we have a single color, we expand that into an array
+            // of the same color over and over.
+            child.colors = [];
+            for (j = 0, maxj = child.vertices.length / 3;
+                    j < maxj; j += 1) {
+                child.colors = child.colors.concat(
+                    child.color.r,
+                    child.color.g,
+                    child.color.b
+                );
+            }
+        }
+        child.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                child.colors);
+        
+
+    }
+    /*
      * Displays an individual object.
      */
     drawObject = function (object) {
-        /*
-        for(var e = 0; e < object.vertices.length;e++ ){
-            if(object.vertices[e]!= undefined && object.vertices[e].constructor === Array){
-                console.log("e : "+ e);
-            }else{
-                    console.log(")))))))))))))))))))))) "+ e);
-            }
-    
-        }
-        
-
-        console.log(((object.vertices[0]) instanceof Array)+"i");
-        console.log((object.mode) instanceof Array);
-        console.log((object.buffer) instanceof Array);
-
-        if ((object.vertices[]) instanceof Array)
-
-        var child =  {
-            color: ((object.colorBuffer) instanceof Array)?  object.colorBuffer[i] : object.colorBuffer,
-            vertices: object.vertices[i],
-            mode: object.mode[i],
-            buffer: GLSLUtilities.initVertexBuffer(gl,object.vertices[i]);
-        };*/
+      
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
+        
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
+        // This will draw any substructure of a composite object
+        if (object.chidStructure){
+            passToWebGL(object.chidStructure);
+            drawObject(object.chidStructure);
+        }
     };
 
     /*

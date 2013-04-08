@@ -125,7 +125,15 @@ var Shapes = {
             v = [],
             ind = [],
             Zcenter = 0,
-            Yheight = -0.95;
+            Yheight = -0.95,
+            childSides = 10,
+            childSize = 0.3,
+            childXcenter = 0,
+            childYcenter = 0.75,
+            vChild = [],
+            indChild = [],
+            childZcenter = 0,
+            childYheight = -0.2;
         //This creates the first 6 coordinates of the vertices array that represent an hexagon
         for (var i = 0; i <= numberOfSides;i += 1) {
             // JD: Why is this vertex an array of arrays?
@@ -159,11 +167,36 @@ var Shapes = {
             ind.push([numberOfSides, i, (i + 1) % numberOfSides]);
         }
 
+        //Create Child
+        for (var i = 0; i < childSides;i += 1) {
+ 
+            vChild[i] =  [childXcenter + childSize * Math.cos(i * 2 * Math.PI / childSides) , childYcenter ,
+                     childZcenter + childSize * Math.sin(i * 2 * Math.PI / childSides) ];
+
+            vChild[ i + childSides ] = [ vChild[i][0], childYheight, vChild[i][2] ];
+        }
+
+        for (i = 0; i < childSides; i += 1) {
+            // Note this calculation which accounts for the wraparound.
+            var nextVertexCenter = (i + 1) % childSides,
+                nextVertexHeight = nextVertexCenter + childSides;
+
+            indChild.push([i, nextVertexCenter, i + childSides]);
+            indChild.push([nextVertexCenter, nextVertexHeight, i + childSides]);
+        }
+        var child = {
+            vertices: vChild,
+            indices: indChild
+        };
+
         return {
 
             vertices: v,
 
-            indices: ind
+            indices: ind,
+            
+            childStructure: child,
+            
         };
     },
     /*
@@ -171,88 +204,39 @@ var Shapes = {
      */
     pencilBody: function () {
 
-        var numberOfSides = 10,
-            size = 0.3,
-            Xcenter = 0,
-            Ycenter = 0.75,
-            v = [],
-            ind = [],
-            Zcenter = 0,
-            Yheight = -0.2;
+        var childSides = 10,
+            childSize = 0.3,
+            childXcenter = 0,
+            childYcenter = 0.75,
+            vChild = [],
+            indChild = [],
+            childZcenter = 0,
+            childYheight = -0.2;
 
         // JD: You had <= below when you really should have done <
-        //     (otherwise v[i + numberOfSides] gets overwritten.
-        for (var i = 0; i < numberOfSides;i += 1) {
-            // JD: Again, I am not clear here.  You are assigning different
-            //     elements of the v array with different data types.  The
-            //     first line assigns an array of arrays.  The next line
-            //     assigns a plain array.  What exactly is your intent here?
-            v[i] =  [Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) , Ycenter ,
-                     Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ];
+        //     (otherwise vChild[i + childSides] gets overwritten.
+        for (var i = 0; i < childSides;i += 1) {
+ 
+            vChild[i] =  [childXcenter + childSize * Math.cos(i * 2 * Math.PI / childSides) , childYcenter ,
+                     childZcenter + childSize * Math.sin(i * 2 * Math.PI / childSides) ];
 
-            v[ i + numberOfSides ] = [ v[i][0], Yheight, v[i][2] ];
+            vChild[ i + childSides ] = [ vChild[i][0], childYheight, vChild[i][2] ];
         }
-            // JD: I don't get this.  Why is v[6] so special?
-            //     (commenting this out)
-//            v[6] = [ v[0][0], Yheight, v[0][2] ];
 
-            
-        // JD: Again, think this through.  You are forming a hollow "cylinder"
-        //     consisting of numberOfSides rectangles.  There are two triangles
-        //     per rectangle.  Thus, your index array should have 2 * numberOfSides
-        //     entries.  The code below has many more sides than that!
-        //
-        //     Have you plotted these vertices on paper and formed triangles from
-        //     them?  That is pretty much how you would form the indices array.
-//        for (var e = 0; e < v.length; e++){
-//
-//            if ( e < numberOfSides){
-//                if(e == numberOfSides-2){
-//                    ind.push([e,e+1,0],
-//                             [e, e+numberOfSides, e+numberOfSides+1],
-//                             [e, e+1, e+numberOfSides+1]);
-//                } else if (e == numberOfSides - 1 ){
-//                    ind.push([e,0,1],
-//                             [e, e+numberOfSides, numberOfSides],
-//                             [e, 0, numberOfSides]);
-//                } else{
-//                    ind.push([e,e+1,e+2],
-//                             [e, e+numberOfSides, e+numberOfSides+1],
-//                             [e, e+1, e+numberOfSides+1]);
-//                }
-//
-//            }else{
-//                if(e == v.length-2){
-//                    ind.push([e,e+1,numberOfSides]);
-//                } else if (e == v.length - 1 ){
-//                    ind.push([e,numberOfSides,numberOfSides+1]);
-//                } else{
-//                    ind.push([e,e+1,e+2]);
-//                }
-//            }
-//            
-//        }
-        
-        // JD: One more freebie for you and that's it.  Here is a version
-        //     that builds your index array that produces the precise number
-        //     of triangles required for the hollow cylinder.  Note how I
-        //     even followed the pattern of your vertex generation code
-        //     (minus the funky array-of-arrays approach which I still
-        //     don't understand).
-        for (i = 0; i < numberOfSides; i += 1) {
-            // JD: Note this calculation which accounts for the wraparound.
-            var nextVertexCenter = (i + 1) % numberOfSides,
-                nextVertexHeight = nextVertexCenter + numberOfSides;
+        for (i = 0; i < childSides; i += 1) {
+            // Note this calculation which accounts for the wraparound.
+            var nextVertexCenter = (i + 1) % childSides,
+                nextVertexHeight = nextVertexCenter + childSides;
 
-            ind.push([i, nextVertexCenter, i + numberOfSides]);
-            ind.push([nextVertexCenter, nextVertexHeight, i + numberOfSides]);
+            indChild.push([i, nextVertexCenter, i + childSides]);
+            indChild.push([nextVertexCenter, nextVertexHeight, i + childSides]);
         }
 
         return {
 
-            vertices: v,
+            vertices: vChild,
 
-            indices: ind
+            indices: indChild
         };
     },
     /*
