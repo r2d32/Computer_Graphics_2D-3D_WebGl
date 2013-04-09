@@ -140,12 +140,12 @@
             vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
             mode: gl.TRIANGLES,
 
-            chidStructure: {
+            childSubstructure: {
                 color: {r:1, g: 0.84, b:0},
                 vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
                 mode: gl.TRIANGLES,
                 
-                chidStructure: {
+                childSubstructure: {
                     color: {r:0, g: 0, b:0},
                     vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
                     mode: gl.LINES,
@@ -267,9 +267,9 @@
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
         // This will draw any substructure of a composite object
-        if (object.chidStructure){
-            passToWebGL(object.chidStructure);
-            drawObject(object.chidStructure);
+        if (object.childSubstructure){
+            passToWebGL(object.childSubstructure);
+            drawObject(object.childSubstructure);
         }
     };
 
