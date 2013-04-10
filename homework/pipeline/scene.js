@@ -24,6 +24,7 @@
         rotationMatrix,
         //HW
         // Projection matrix
+        projectionMatrix, 
         vertexPosition,
         vertexColor,
 
@@ -224,7 +225,9 @@
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
         //HW
     //projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
+    projectionMatrix = gl.getUniformLocation(shaderProgram,"projectionMatrix");
     //ortho(arguments).conversionConvenience();
+   // ortho().conversion();
 
     /*
      * Passes substructure objects to WebGL
@@ -291,12 +294,12 @@
         // All done.
         gl.flush();
     };
-    // HW: Set up the ortho prokjection matrix
-    // gl.uniformMatrix4fv( projectionMatrix,
-    //     gl.FALSE, new Float32Array(
-    //         Matrix4x4.ortho(-150 150 -150 15- 5 10000).convert()
-    //    )
-    // );
+    // HW: Set up the ortho projection matrix
+     gl.uniformMatrix4fv( projectionMatrix,
+         gl.FALSE, new Float32Array(
+            new Matrix4x4().ortho(-150, 150, -150, 15,-5, 10000).convert()
+        )
+     );
 
     // Draw the initial scene.
     drawScene();

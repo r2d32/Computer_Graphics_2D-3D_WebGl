@@ -36,7 +36,7 @@ var Matrix4x4 = (function () {
     
     //HW change this methods into 
     // ortho = funcion()
-    ortho = function(l, r, b, t, n, f){
+    matrix4x4.prototype.ortho = function(l, r, b, t, n, f){
         var width = r - l,
             height = t - b,
             depth = f - n;
