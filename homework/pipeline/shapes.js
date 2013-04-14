@@ -4,12 +4,7 @@
  * converting these into "raw" coordinate arrays.
  */
 var Shapes = {
-    // JD: This is an interesting idea, but it will only work under
-    //     a very specific assumption---namely, that the given array
-    //     of vertices is arranged in such a way that they all form
-    //     triangles according to the order listed.
-    //
-    //     This is not a very general assumption.
+
     getIndices: function (a) {
         var b =[];
         for (var e = 0; e < a.length; e++){
@@ -40,12 +35,6 @@ var Shapes = {
         return {
             vertices: v,
 
-            // JD: See above: you don't gain much by replacing this
-            //     with your getIndices function, especially for a
-            //     mesh that is as simple as this.  You capture a
-            //     routine as a function when that computation will
-            //     see a lot of use in a lot of situations.  That is
-            //     simply not the case with general polygon meshes.
             indices: Shapes.getIndices(v)
         };
     },
@@ -118,52 +107,33 @@ var Shapes = {
      */
     pencilTip: function () {
 
-        var numberOfSides = 40,
+        var numberOfSides = 4,
             size = 0.3,
             Xcenter = 0,
             Ycenter = -0.2,
             v = [],
             ind = [],
             Zcenter = 0,
-            Yheight = -0.95,
-            childSides = 10,
+            Yheight = -2,
+            childSides = 4,
             childSize = 0.3,
             childXcenter = 0,
-            childYcenter = 0.75,
+            childYcenter = 0.5,
             vChild = [],
             indChild = [],
             childZcenter = 0,
             childYheight = -0.2;
         //This creates the first 6 coordinates of the vertices array that represent an hexagon
         for (var i = 0; i <= numberOfSides;i += 1) {
-            // JD: Why is this vertex an array of arrays?
+          
             v[i] =  [Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ,Ycenter ,
                      Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ];
         }
         //This adds the tip coordinate at the end of the array 
         v[numberOfSides] = [ Xcenter,Yheight,Zcenter ]; 
 
-        // JD: If you think about it, your polygon mesh should have the same
-        //     number of triangles as you have sides (your pencil tip is
-        //     essentially a hollow cone, as far as I can tell).
-        //     This routine produces *twice* that many triangles!
-//        for(var e = 0; e < numberOfSides; e++){
-//            if(e == numberOfSides - 1 ){
-//                ind.push([e,0,1],
-//                         [e,0,numberOfSides]);
-//            } else if(e == numberOfSides-2){
-//                    ind.push([e,e+1,0],
-//                             [e,e+1,numberOfSides]);
-//            } else{
-//                    ind.push([e,e+1,e+2],
-//                             [e,e+1,numberOfSides]);
-//            }
-//        
-//        }
-        // JD: Compare the array you produce above to this one:
         for (i = 0; i < numberOfSides; i += 1) {
-            // JD: One triangle per side.  Note the mod at the end
-            //     because the last triangle wraps around to vertex 0.
+
             ind.push([numberOfSides, i, (i + 1) % numberOfSides]);
         }
 
@@ -202,9 +172,9 @@ var Shapes = {
     /*
      * Returns the vertices for pencil body.
      */
-    pencilBody: function () {
+    cilinder: function (n) {
 
-        var childSides = 10,
+        var childSides = n,
             childSize = 0.3,
             childXcenter = 0,
             childYcenter = 0.75,
@@ -213,8 +183,6 @@ var Shapes = {
             childZcenter = 0,
             childYheight = -0.2;
 
-        // JD: You had <= below when you really should have done <
-        //     (otherwise vChild[i + childSides] gets overwritten.
         for (var i = 0; i < childSides;i += 1) {
  
             vChild[i] =  [childXcenter + childSize * Math.cos(i * 2 * Math.PI / childSides) , childYcenter ,

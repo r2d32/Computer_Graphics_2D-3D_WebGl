@@ -21,6 +21,7 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
+        modelViewMatrix,
         rotationMatrix,
         //HW
         // Projection matrix
@@ -39,77 +40,6 @@
         maxi,
         j,
         maxj,
-
-       // JD: This function really should go away, now that you
-        //     have its equivalent in your Matrix4x4 library.
-        /*
-         * This code does not really belong here: it should live
-         * in a separate library of matrix and transformation
-         * functions.  It is here only to show you how matrices
-         * can be used with GLSL.
-         *
-         * Based on the original glRotate reference:
-         *     http://www.opengl.org/sdk/docs/man/xhtml/glRotate.xml
-         */
-        getRotationMatrix = function (angle, x, y, z) {
-            // In production code, this function should be associated
-            // with a matrix object with associated functions.
-            var axisLength = Math.sqrt((x * x) + (y * y) + (z * z)),
-                s = Math.sin(angle * Math.PI / 180.0),
-                c = Math.cos(angle * Math.PI / 180.0),
-                oneMinusC = 1.0 - c,
-
-                // We can't calculate this until we have normalized
-                // the axis vector of rotation.
-                x2, // "2" for "squared."
-                y2,
-                z2,
-                xy,
-                yz,
-                xz,
-                xs,
-                ys,
-                zs;
-
-            // Normalize the axis vector of rotation.
-            x /= axisLength;
-            y /= axisLength;
-            z /= axisLength;
-
-            // *Now* we can calculate the other terms.
-            x2 = x * x;
-            y2 = y * y;
-            z2 = z * z;
-            xy = x * y;
-            yz = y * z;
-            xz = x * z;
-            xs = x * s;
-            ys = y * s;
-            zs = z * s;
-
-            // GL expects its matrices in column major order.
-            return [
-                (x2 * oneMinusC) + c,
-                (xy * oneMinusC) + zs,
-                (xz * oneMinusC) - ys,
-                0.0,
-
-                (xy * oneMinusC) - zs,
-                (y2 * oneMinusC) + c,
-                (yz * oneMinusC) + xs,
-                0.0,
-
-                (xz * oneMinusC) + ys,
-                (yz * oneMinusC) - xs,
-                (z2 * oneMinusC) + c,
-                0.0,
-
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ];
-        };
 
     // Grab the WebGL rendering context.
     gl = GLSLUtilities.getGL(canvas);
@@ -134,6 +64,17 @@
             color: {r: 1, g: 0, b: 0},
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.LINES,
+            axis: { x: 1.0, y: 0.0, z: 1.0 },
+            trans: { dx: -0.5, dy: 1.0, dz: 0.0 },
+            trans2: { dx: -0.5, dy: 1.0, dz: 0.0 }
+        },
+        {   
+            color: {r: 1, g: 1, b: 0},
+            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+            mode: gl.TRIANGLES,
+            axis: { x: 1.0, y: 0.0, z: 1.0 },
+            trans: { dx: -2, dy: 0.0, dz: 0.0 },
+            scalation: {sx:3,sy:3,sz:3}
         },
         {
 
@@ -142,22 +83,36 @@
             mode: gl.TRIANGLES,
 
             childSubstructure: {
-                color: {r:1, g: 0.84, b:0},
+                color: {r:0.98, g: 0.98, b:0.98},
                 vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
                 mode: gl.TRIANGLES,
                 
                 childSubstructure: {
                     color: {r:0, g: 0, b:0},
-                    vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
-                    mode: gl.LINES,
+                    vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16)),
+                    mode: gl.TRIANGLES,
+                    axis: { x: -0.5, y: 1.0, z: 0.0 },
+                    trans: { dx: -0.5, dy: 0.0, dz: 0.0 },
+
+                    childSubstructure: {
+                        color: {r:0, g: 0, b:0},
+                        vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
+                        mode: gl.LINES,
+                        axis: { x: -0.5, y: 1.0, z: 0.0 }
+                
+                    },
+                
                 },
+                
+                axis: { x: -0.5, y: 1.0, z: 0.0 }
             },
+            axis: { x: -0.5, y: 1.0, z: 0.0 }
         },
 
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },
             vertices: Shapes.toRawLineArray(Shapes.pyramid()),
-            mode: gl.LINES
+            mode: gl.LINES,
         },
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
@@ -225,6 +180,7 @@
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
         //HW
     //projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
+    modelViewMatrix = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
     projectionMatrix = gl.getUniformLocation(shaderProgram,"projectionMatrix");
     //ortho(arguments).conversionConvenience();
    // ortho().conversion();
@@ -259,11 +215,38 @@
      * Displays an individual object.
      */
     drawObject = function (object) {
-      
+        var mm = new Matrix4x4();
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
+        if (object.axis != undefined) {
+             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
+                mm.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z).conversion()
+            ));
+
+            mm = mm.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z);
+
+        }
+
+        if (object.trans != undefined) {
+             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
+                mm.translate(object.trans.dx, object.trans.dy, object.trans.dz).conversion() 
+            ));
+
+            mm = mm.translate(object.trans.dx, object.trans.dy, object.trans.dz);
+
+        }
+
+        if (object.scalation != undefined) {
+             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
+                mm.scale(object.scalation.sx, object.scalation.sy, object.scalation.sz).conversion() 
+            ));
+
+            mm = mm.translate(object.trans.dx, object.trans.dy, object.trans.dz);
+
+        }
+            
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
         
@@ -284,8 +267,8 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Set up the rotation matrix.
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)));
-
+        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
+                new Matrix4x4().rotate(currentRotation, 0, 1, 0).conversion()));
         // Display the objects.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
             drawObject(objectsToDraw[i]);
@@ -297,7 +280,7 @@
     // HW: Set up the ortho projection matrix
      gl.uniformMatrix4fv( projectionMatrix,
          gl.FALSE, new Float32Array(
-            new Matrix4x4().ortho(-150, 150, -150, 15,-5, 10000).convert()
+            new Matrix4x4().ortho(-5, 5, -5, 5,-5, 10).conversion()
         )
      );
 
