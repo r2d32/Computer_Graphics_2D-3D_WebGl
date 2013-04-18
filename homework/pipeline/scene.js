@@ -79,19 +79,19 @@
         {
 
             color: {r:0.98, g: 0.98, b:0.98},
-            vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
+            vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
             mode2: gl.LINES,
             axis: { x: -0.5, y: 1.0, z: 0.0 },
             childSubstructure:[
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
-                    vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
+                    vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
-                    vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
+                    vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
                     mode: gl.LINES,
                 },
                 {
@@ -259,7 +259,7 @@
         }
 
         if (object.scalation != undefined) {
-             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
+            gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
                 m.scale(object.scalation.sx, object.scalation.sy, object.scalation.sz).conversion() 
             ));
 

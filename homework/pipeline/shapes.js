@@ -24,7 +24,6 @@ var Shapes = {
      * Returns the vertices for a small pyramid.
      */
     pyramid: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
         var v =[
                 [ 1.3, 0.35, -1.35 ],
                 [ 0.2, 0.35, 0.2 ],
@@ -40,7 +39,6 @@ var Shapes = {
     },
         
     wings: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
         var v =[
                 [ 1.3, 0.35, -1.35 ],
                 [ 0.2, 0.35, 0.2 ],
@@ -55,7 +53,6 @@ var Shapes = {
         };
     },
     cabin: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
         var v =[
                 [ 0.4, 0.4, -0.4 ],
                 [ 0.5, 0.4, 0.5 ],
@@ -70,7 +67,6 @@ var Shapes = {
         };
     },
     glass: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
         var v =[
                 [ 0.2, 0.35, -0.2 ],
                 [ 0.5, 0.35, 0.5 ],
@@ -151,7 +147,7 @@ var Shapes = {
     /*
      * Returns the vertices for pencil tip.
      */
-    pencilTip: function () {
+    xWing: function () {
 
         var numberOfSides = 4,
             size = 0.4,
@@ -169,7 +165,6 @@ var Shapes = {
             indChild = [],
             childZcenter = 0,
             childYheight = -0.2;
-        //This creates the first 6 coordinates of the vertices array that represent an hexagon
         for (var i = 0; i <= numberOfSides;i += 1) {
           
             v[i] =  [Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ,Ycenter ,
@@ -232,7 +227,7 @@ var Shapes = {
         for (var i = 0; i < childSides;i += 1) {
  
             vChild[i] =  [childXcenter + childSize * Math.cos(i * 2 * Math.PI / childSides) , childYcenter ,
-                     childZcenter + childSize * Math.sin(i * 2 * Math.PI / childSides) ];
+                childZcenter + childSize * Math.sin(i * 2 * Math.PI / childSides) ];
 
             vChild[ i + childSides ] = [ vChild[i][0], childYheight, vChild[i][2] ];
         }
