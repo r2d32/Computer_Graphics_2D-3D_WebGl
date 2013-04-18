@@ -26,10 +26,56 @@ var Shapes = {
     pyramid: function () {
         // These variables are actually "constants" for icosahedron coordinates.
         var v =[
-                [ 0.5, 0.5, 0.5 ],
-                [ 0.5, 0.5, -0.5 ],
-                [ -0.5, 0.5, -0.5 ],
-                [ -0.5, -0.5, 0.5 ]
+                [ 1.3, 0.35, -1.35 ],
+                [ 0.2, 0.35, 0.2 ],
+                [ -1.35, 0.35, 1.25 ],
+                [ -0, -0.4, 0 ]
+            ];
+
+        return {
+            vertices: v,
+
+            indices: Shapes.getIndices(v)
+        };
+    },
+        
+    wings: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var v =[
+                [ 1.3, 0.35, -1.35 ],
+                [ 0.2, 0.35, 0.2 ],
+                [ -1.35, 0.35, 1.25 ],
+                [ -0, -0.4, 0 ]
+            ];
+
+        return {
+            vertices: v,
+
+            indices: Shapes.getIndices(v)
+        };
+    },
+    cabin: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var v =[
+                [ 0.4, 0.4, -0.4 ],
+                [ 0.5, 0.4, 0.5 ],
+                [ -0.4, 0.4, 0.4 ],
+                [ -0, -0.6, 0 ]
+            ];
+
+        return {
+            vertices: v,
+
+            indices: Shapes.getIndices(v)
+        };
+    },
+    glass: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var v =[
+                [ 0.2, 0.35, -0.2 ],
+                [ 0.5, 0.35, 0.5 ],
+                [ -0.2, 0.35, 0.2 ],
+                [ -0, -0.8, 0 ]
             ];
 
         return {
@@ -108,15 +154,15 @@ var Shapes = {
     pencilTip: function () {
 
         var numberOfSides = 4,
-            size = 0.3,
+            size = 0.4,
             Xcenter = 0,
             Ycenter = -0.2,
+            Zcenter = 0,
             v = [],
             ind = [],
-            Zcenter = 0,
             Yheight = -2,
             childSides = 4,
-            childSize = 0.3,
+            childSize = 0.4,
             childXcenter = 0,
             childYcenter = 0.5,
             vChild = [],
@@ -172,15 +218,15 @@ var Shapes = {
     /*
      * Returns the vertices for pencil body.
      */
-    cilinder: function (n) {
+    cilinder: function (n,x,y,z) {
 
         var childSides = n,
-            childSize = 0.3,
-            childXcenter = 0,
-            childYcenter = 0.75,
+            childSize = 0.15,
+            childXcenter = x,
+            childYcenter = y,
+            childZcenter = z,
             vChild = [],
             indChild = [],
-            childZcenter = 0,
             childYheight = -0.2;
 
         for (var i = 0; i < childSides;i += 1) {

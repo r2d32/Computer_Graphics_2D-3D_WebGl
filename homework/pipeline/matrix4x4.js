@@ -80,13 +80,8 @@ var Matrix4x4 = (function () {
         return this.elements.length;
     };
 
-    // JD: I'm not clear on what this is supposed to do, especially
-    //     in light of what your unit test produces.  A little
-    //     header comment will help.
+
     // Preparation of matrix for consumption by WebGL and GLSL
-    //
-    // JD 0402: OK, this is better.  Last time you were returning
-    //     a string.
     matrix4x4.prototype.conversion = function (){
         var changed = [],
             i,

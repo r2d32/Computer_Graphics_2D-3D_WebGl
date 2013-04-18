@@ -81,44 +81,67 @@
             color: {r:0.98, g: 0.98, b:0.98},
             vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
             mode: gl.TRIANGLES,
-
-            childSubstructure: {
-                color: {r:0.98, g: 0.98, b:0.98},
-                vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
-                mode: gl.TRIANGLES,
-                
-                childSubstructure: {
-                    color: {r:0, g: 0, b:0},
-                    vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16)),
+            mode2: gl.LINES,
+            axis: { x: -0.5, y: 1.0, z: 0.0 },
+            childSubstructure:[
+                {
+                    color: {r:0.7, g: 0.7, b:0.7},
+                    vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
                     mode: gl.TRIANGLES,
-                    axis: { x: -0.5, y: 1.0, z: 0.0 },
-                    trans: { dx: -0.5, dy: 0.0, dz: 0.0 },
-
-                    childSubstructure: {
-                        color: {r:0, g: 0, b:0},
-                        vertices: Shapes.toRawTriangleArray(Shapes.pencilTip()),
-                        mode: gl.LINES,
-                        axis: { x: -0.5, y: 1.0, z: 0.0 }
-                
-                    },
-                
                 },
-                
-                axis: { x: -0.5, y: 1.0, z: 0.0 }
-            },
-            axis: { x: -0.5, y: 1.0, z: 0.0 }
+                {
+                    color: {r:0.5, g: 0.5, b:0.5},
+                    vertices: Shapes.toRawTriangleArray(Shapes.pencilTip().childStructure ),
+                    mode: gl.LINES,
+                },
+                {
+                    color: {r:0.5, g: 0.5, b:0.5},
+                    vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0,0.6,-0.33)),
+                    mode: gl.TRIANGLES,
+                },
+                {
+                    color: {r:0.5, g: 0.5, b:0.5},
+                    vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0,0.6,0.33)),
+                    mode: gl.TRIANGLES,
+                },
+                {
+                    color: {r:0.5, g: 0.5, b:0.5},
+                    vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0.33,0.6,0)),
+                    mode: gl.TRIANGLES,
+                },
+                {
+                    color: {r:0.5, g: 0.5, b:0.5},
+                    vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,-0.33,0.6,0)),
+                    mode: gl.TRIANGLES,
+                },
+                {
+                    color: { r: 0.6, g: 0.6, b: 0.6 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.cabin()),
+                    mode: gl.TRIANGLES
+                },
+                {
+                    color: { r: 0.0, g: 0.0, b: 0.6 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.glass()),
+                    mode: gl.TRIANGLES
+                },
+                {
+                    color: {r:0.98, g: 0.98, b:0.98},
+                    vertices: Shapes.toRawTriangleArray(Shapes.wings()),
+                    mode: gl.TRIANGLES,
+                    mode2: gl.LINES,
+                }
+
+            ]
+            
         },
 
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },
             vertices: Shapes.toRawLineArray(Shapes.pyramid()),
-            mode: gl.LINES,
-        },
-        {
-            color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
-            mode: gl.LINES
+            mode: gl.TRIANGLES,
         }
+        
+
     ];
 
     // Pass the vertices to WebGL.
@@ -178,12 +201,8 @@
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
-        //HW
-    //projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
     modelViewMatrix = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
     projectionMatrix = gl.getUniformLocation(shaderProgram,"projectionMatrix");
-    //ortho(arguments).conversionConvenience();
-   // ortho().conversion();
 
     /*
      * Passes substructure objects to WebGL
@@ -215,38 +234,38 @@
      * Displays an individual object.
      */
     drawObject = function (object) {
-        var mm = new Matrix4x4();
+        var m = new Matrix4x4();
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
+
         if (object.axis != undefined) {
              gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                mm.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z).conversion()
+                m.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z).conversion()
             ));
 
-            mm = mm.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z);
+            m = m.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z);
 
         }
 
         if (object.trans != undefined) {
-             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                mm.translate(object.trans.dx, object.trans.dy, object.trans.dz).conversion() 
+            gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
+                m.translate(object.trans.dx, object.trans.dy, object.trans.dz).conversion() 
             ));
 
-            mm = mm.translate(object.trans.dx, object.trans.dy, object.trans.dz);
+            m = m.translate(object.trans.dx, object.trans.dy, object.trans.dz);
 
         }
 
         if (object.scalation != undefined) {
              gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                mm.scale(object.scalation.sx, object.scalation.sy, object.scalation.sz).conversion() 
+                m.scale(object.scalation.sx, object.scalation.sy, object.scalation.sz).conversion() 
             ));
 
-            mm = mm.translate(object.trans.dx, object.trans.dy, object.trans.dz);
+            m = m.translate(object.trans.dx, object.trans.dy, object.trans.dz);
 
         }
-            
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
         
@@ -254,9 +273,15 @@
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
         // This will draw any substructure of a composite object
         if (object.childSubstructure){
-            passToWebGL(object.childSubstructure);
-            drawObject(object.childSubstructure);
+            for(var e = 0; e < object.childSubstructure.length; e++ ){
+                object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? object.childSubstructure[e].axis :
+                    object.axis;
+
+                passToWebGL(object.childSubstructure[e]);
+                drawObject(object.childSubstructure[e]);
+            }
         }
+
     };
 
     /*
@@ -268,7 +293,7 @@
 
         // Set up the rotation matrix.
         gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
-                new Matrix4x4().rotate(currentRotation, 0, 1, 0).conversion()));
+                new Matrix4x4().conversion()));
         // Display the objects.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
             drawObject(objectsToDraw[i]);
@@ -277,12 +302,11 @@
         // All done.
         gl.flush();
     };
-    // HW: Set up the ortho projection matrix
-     gl.uniformMatrix4fv( projectionMatrix,
-         gl.FALSE, new Float32Array(
+    gl.uniformMatrix4fv( projectionMatrix,
+        gl.FALSE, new Float32Array(
             new Matrix4x4().ortho(-5, 5, -5, 5,-5, 10).conversion()
         )
-     );
+    );
 
     // Draw the initial scene.
     drawScene();
