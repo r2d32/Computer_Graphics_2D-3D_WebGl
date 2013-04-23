@@ -72,8 +72,52 @@
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.LINES,
             axis: { x: 1.0, y: 0.0, z: 1.0 },
-            trans: { dx: -0.5, dy: 1.0, dz: 0.0 },
-            trans2: { dx: -0.5, dy: 1.0, dz: 0.0 }
+            trans: { dx: -0.5, dy: 1.0, dz: -20.0 },
+            trans2: { dx: -0.5, dy: 1.0, dz: 0.0 },
+            keyframes: [
+                {
+                    frame: 0,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: -0.5,
+                    ty: 1.0,
+                    tz: -20.0
+                },
+                {
+                    frame: 100,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: 5,
+                    ty: 5,
+                    tz: -25
+                },
+                {
+                    frame: 200,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: 5,
+                    ty: -5,
+                    tz: -5
+                },
+                {
+                    frame: 300,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: -5,
+                    ty: -5,
+                    tz: -25
+                },
+                {
+                    frame: 400,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: -5,
+                    ty: 5,
+                    tz: -5
+                },
+                {
+                    frame: 500,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: 0,
+                    ty: 0,
+                    tz: -100
+                }
+            ]
         },
         {   
             color: {r: 1, g: 1, b: 0},
@@ -492,7 +536,7 @@
 
     gl.uniformMatrix4fv( projectionMatrix,
         gl.FALSE, new Float32Array(
-            new Matrix4x4().ortho(-5, 5, -5, 5,-5, 10).conversion()
+            new Matrix4x4().frustum(-5, 5, -5, 5, 10, 1000).conversion()
         )
     );
 
