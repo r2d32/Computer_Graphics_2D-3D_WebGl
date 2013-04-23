@@ -138,8 +138,52 @@
                     mode2: gl.LINES,
                 }
 
+            ],
+
+            keyframes: [
+                {
+                    frame: 0,
+                    ease: KeyframeTweener.quadEaseOut,
+                    tx: 0,
+                    ty: 5,
+                    tz: 0
+                },
+
+                {
+                    frame: 200,
+                    ease: KeyframeTweener.quadEaseInAndOut,
+                    tx: 5,
+                    ty: 0,
+                    tz: 0
+                },
+
+                {
+                    frame: 400,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: -5,
+                    ty: 0,
+                    tz: 0
+                },
+
+                {
+                    frame: 600,
+                    ease: KeyframeTweener.quadEaseOut,
+                    tx: 4,
+                    ty: 3,
+                    tz: -10,
+                    sx: 0.25,
+                    sy: 0.25,
+                    sz: 0.25,
+                },
+
+                {
+                    frame: 800,
+                    ease: KeyframeTweener.quadEaseInAndOut,
+                    tx: 3,
+                    ty: -2,
+                    tz: 3
+                },
             ]
-            
         },
 
         {
@@ -247,12 +291,19 @@
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
 
-        if (object.axis != undefined) {
+        if (object.axis != undefined &&
+            (object.axis.x || object.axis.y || object.axis.z)) {
              gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                m.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z).conversion()
+                m.rotate(
+                    object.axis.theta || currentRotation,
+                    object.axis.x, object.axis.y, object.axis.z
+                ).conversion()
             ));
 
-            m = m.rotate(currentRotation, object.axis.x, object.axis.y, object.axis.z);
+            m = m.rotate(
+                object.axis.theta || currentRotation,
+                object.axis.x, object.axis.y, object.axis.z
+            );
 
         }
 
@@ -283,6 +334,10 @@
             for(var e = 0; e < object.childSubstructure.length; e++ ){
                 object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? object.childSubstructure[e].axis :
                     object.axis;
+                object.childSubstructure[e].trans = (object.childSubstructure[e].trans) ?
+                    object.childSubstructure[e].trans : object.trans;
+                object.childSubstructure[e].scalation = (object.childSubstructure[e].scalation) ?
+                    object.childSubstructure[e].scalation : object.scalation;
 
                 passToWebGL(object.childSubstructure[e]);
                 drawObject(object.childSubstructure[e]);
@@ -314,6 +369,125 @@
      * Updates the scene based on current keyframes.
      */
     tweenScene = function () {
+        // Some reusable loop variables.
+        var i,
+            j,
+            k,
+            maxI,
+            maxJ,
+            maxK,
+            ease,
+            startKeyframe,
+            endKeyframe,
+            currentTweenFrame,
+            duration,
+            transformSetting,
+
+            // Custom helper function and data structure that will capture
+            // the repeated tweening code and data.
+            createTween,
+            tweens = [];
+
+        // Let's define the helper.
+        createTween = function (start, startDefault, end, endDefault, transform, property) {
+            var distance;
+            start = start || startDefault;
+            distance = (end || endDefault) - start;
+            return {
+                start: start,
+                distance: distance,
+                transform: transform,
+                property: property
+            };
+        };
+
+        // For every object, go to the current pair of keyframes.
+        // Then, set the instance transform of the object based on the current frame.
+        for (i = 0, maxI = objectsToDraw.length; i < maxI; i += 1) {
+            // Not every object will have keyframes...
+            if (!objectsToDraw[i].keyframes) {
+                continue;
+            }
+
+            // ...but if an object does have them...
+            for (j = 0, maxJ = objectsToDraw[i].keyframes.length - 1; j < maxJ; j += 1) {
+                // We look for keyframe pairs such that the current
+                // frame is between their frame numbers.
+                if ((objectsToDraw[i].keyframes[j].frame <= currentFrame) &&
+                        (currentFrame <= objectsToDraw[i].keyframes[j + 1].frame)) {
+                    // Point to the start and end keyframes.
+                    startKeyframe = objectsToDraw[i].keyframes[j];
+                    endKeyframe = objectsToDraw[i].keyframes[j + 1];
+
+                    // Set up our start and distance values, using defaults
+                    // if necessary.
+                    ease = startKeyframe.ease || KeyframeTweener.linear;
+                    tweens = [];
+                    tweens.push(createTween(
+                        startKeyframe.tx, 0, endKeyframe.tx, 0,
+                        "trans", "dx"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.ty, 0, endKeyframe.ty, 0,
+                        "trans", "dy"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.tz, 0, endKeyframe.tz, 0,
+                        "trans", "dz"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.sx, 1, endKeyframe.sx, 1,
+                        "scalation", "sx"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.sy, 1, endKeyframe.sy, 1,
+                        "scalation", "sy"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.sz, 1, endKeyframe.sz, 1,
+                        "scalation", "sz"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.rotate * Math.PI / 180, 0,
+                        endKeyframe.rotate * Math.PI / 180, 0,
+                        "axis", "theta"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.rx, 0, endKeyframe.rx, 0,
+                        "axis", "x"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.ry, 0, endKeyframe.ry, 0,
+                        "axis", "y"
+                    ));
+                    tweens.push(createTween(
+                        startKeyframe.rz, 0, endKeyframe.rz, 0,
+                        "axis", "z"
+                    ));
+                    currentTweenFrame = currentFrame - startKeyframe.frame;
+                    duration = endKeyframe.frame - startKeyframe.frame + 1;
+
+                    // Set the object's instance transform according to the tweened
+                    // values.  *** not currently recursive ***
+                    for (k = 0, maxK = tweens.length; k < maxK; k += 1) {
+                        transformSetting = objectsToDraw[i][tweens[k].transform];
+                        if (!transformSetting) {
+                            transformSetting = {};
+                            objectsToDraw[i][tweens[k].transform] = transformSetting;
+                        }
+
+                        transformSetting[tweens[k].property] =
+                            ease(
+                                currentTweenFrame, tweens[k].start,
+                                tweens[k].distance, duration
+                            );
+                    }
+                }
+            }
+        }
+
+        // Move to the next frame.
+        currentFrame += 1;
     };
 
     gl.uniformMatrix4fv( projectionMatrix,
