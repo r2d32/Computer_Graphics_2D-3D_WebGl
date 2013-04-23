@@ -29,6 +29,13 @@
         vertexPosition,
         vertexColor,
 
+        // The all-important (for tweening) currentFrame variable.
+        currentFrame = 0,
+
+        // The also-as-important (for tweening) keyframe update function.
+        // It is based on the interval function used by KeyframeTweener.
+        tweenScene,
+
         // An individual "draw object" function.
         drawObject,
 
@@ -302,6 +309,13 @@
         // All done.
         gl.flush();
     };
+
+    /*
+     * Updates the scene based on current keyframes.
+     */
+    tweenScene = function () {
+    };
+
     gl.uniformMatrix4fv( projectionMatrix,
         gl.FALSE, new Float32Array(
             new Matrix4x4().ortho(-5, 5, -5, 5,-5, 10).conversion()
@@ -319,6 +333,13 @@
         } else {
             currentInterval = setInterval(function () {
                 currentRotation += 1.0;
+
+                // Note how we tween from the repeated-call, and not
+                // drawScene.  This allows us to invoke drawScene for
+                // other things.  Tweening is then cleanly bound to
+                // the repeated function call.
+                tweenScene();
+
                 drawScene();
                 if (currentRotation >= 360.0) {
                     currentRotation -= 360.0;
