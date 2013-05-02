@@ -10,7 +10,7 @@
 
         <p>This website holds the content for Assignment 0326</p>
 
-        <canvas id="hello-webgl" width="512" height="512">
+        <canvas id="hello-webgl" width="712" height="712">
             Sorry, your web browser does not appear to support
             the <code>canvas</code> element, either.
         </canvas>
@@ -27,16 +27,6 @@
 
         <!-- Shapes is a library that generates "canned" shapes. -->
         <script src="shapes.js"></script>
-
-        <!-- JD: Clearly you are using a particular matrix4x4.js file
-                 here.  And yet you have a bunch of files in the
-                 Matrix4x4, including a unit test *that does not test
-                 the file you are using here*.
-                 
-                 So overall, you have some cleaning up and reorganizing
-                 to do in this department.  Not doing so decreases the
-                 maintainability and understandability of the code base.
-        -->
         <script src="matrix4x4.js"></script>
 
         <!-- Set up shaders: we've placed the source in script elements for
@@ -56,16 +46,14 @@
             attribute vec3 vertexColor;
             varying vec4 finalVertexColor;
             uniform mat4 rotationMatrix;
-        
+
+            uniform mat4 translationMatrix;
             uniform mat4 modelViewMatrix;
-            // HW uniform mat4 projectionMatrix;
             uniform mat4 projectionMatrix;
 
             void main(void) {
 
-                // HW gl_Position = rotationMatrix * projectionMatrix * vec4(vertexPosition, 1.0);
-                gl_Position = projectionMatrix * rotationMatrix *  modelViewMatrix* vec4(vertexPosition, 1.0);
-             //   gl_Position = rotationMatrix * vec4(vertexPosition, 1.0);
+                gl_Position = projectionMatrix *  modelViewMatrix *translationMatrix* rotationMatrix *vec4(vertexPosition, 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>

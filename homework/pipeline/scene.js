@@ -71,16 +71,15 @@
             color: {r: 1, g: 0, b: 0},
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.LINES,
-            axis: { x: 1.0, y: 0.0, z: 1.0 },
-            trans: { dx: -0.5, dy: 1.0, dz: -20.0 },
-            trans2: { dx: -0.5, dy: 1.0, dz: 0.0 },
+            //axis: { x: 0.5, y: 0.0, z: 1.0 },
+            trans: { dx: -5, dy: 5.0, dz: -9 },
             keyframes: [
                 {
                     frame: 0,
                     ease: KeyframeTweener.cubicEaseIn,
-                    tx: -0.5,
-                    ty: 1.0,
-                    tz: -20.0
+                    tx: -5,
+                    ty: 5.0,
+                    tz: -9.0
                 },
                 {
                     frame: 100,
@@ -123,9 +122,9 @@
             color: {r: 1, g: 1, b: 0},
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.TRIANGLES,
-            axis: { x: 1.0, y: 0.0, z: 1.0 },
-            trans: { dx: -2, dy: 0.0, dz: 0.0 },
-            scalation: {sx:3,sy:3,sz:3}
+            axis: { x: 0.5, y: 5.0, z: 1.0,  theta:90},
+            trans: { dx: -5, dy: 5.0, dz: -7.0 },
+            scaling: {sx:3,sy:3,sz:3}
         },
         {
 
@@ -133,7 +132,8 @@
             vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
             mode2: gl.LINES,
-            axis: { x: -0.5, y: 1.0, z: 0.0 },
+            trans: { dx: 0, dy: 0, dz: -7.0 },
+            axis: { x: 2, y:3, z: 3.5 , theta: 180 },
             childSubstructure:[
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
@@ -189,43 +189,41 @@
                     frame: 0,
                     ease: KeyframeTweener.quadEaseOut,
                     tx: 0,
-                    ty: 5,
-                    tz: 0
+                    ty: 0,
+                    tz: -1
                 },
 
                 {
                     frame: 200,
                     ease: KeyframeTweener.quadEaseInAndOut,
-                    tx: 5,
-                    ty: 0,
-                    tz: 0
+                    tx: 2,
+                    ty: -2,
+                    tz: -20
                 },
 
                 {
                     frame: 400,
                     ease: KeyframeTweener.cubicEaseIn,
-                    tx: -5,
-                    ty: 0,
-                    tz: 0
+                    tx: 1.5,
+                    ty: -1.5,
+                    tz: -30
                 },
 
                 {
-                    frame: 600,
+                    frame: 500,
                     ease: KeyframeTweener.quadEaseOut,
-                    tx: 4,
-                    ty: 3,
-                    tz: -10,
-                    sx: 0.25,
-                    sy: 0.25,
-                    sz: 0.25,
+                    tx: 1.7,
+                    ty: -1.7,
+                    tz: -25,
+                                
                 },
 
                 {
-                    frame: 800,
-                    ease: KeyframeTweener.quadEaseInAndOut,
-                    tx: 3,
-                    ty: -2,
-                    tz: 3
+                    frame: 1500,
+                    ease: KeyframeTweener.elastic,
+                    tx: 0,
+                    ty:0,
+                    tz: -5000,
                 },
             ]
         },
@@ -295,7 +293,10 @@
     gl.enableVertexAttribArray(vertexPosition);
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
+
+
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
+    translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");
     modelViewMatrix = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
     projectionMatrix = gl.getUniformLocation(shaderProgram,"projectionMatrix");
 
@@ -325,54 +326,40 @@
         
 
     }
+
     /*
      * Displays an individual object.
      */
     drawObject = function (object) {
-        var m = new Matrix4x4();
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
-        // JD: You need to take a really close look at what you are doing to
-        //     the matrix m here.  You are calling each transformation *twice*.
-        //     Is that really your intent?  I strongly suggest that you log
-        //     how m changes as you travel through this code, so you can be
-        //     sure that what your code is doing as the same as what you think
-        //     the code is doing.
+
         if (object.axis != undefined &&
             (object.axis.x || object.axis.y || object.axis.z)) {
-             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                m.rotate(
-                    object.axis.theta || currentRotation,
+             gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
+                new Matrix4x4().rotate(
+                    object.axis.theta ,
                     object.axis.x, object.axis.y, object.axis.z
                 ).conversion()
             ));
 
-            m = m.rotate(
-                object.axis.theta || currentRotation,
-                object.axis.x, object.axis.y, object.axis.z
-            );
 
         }
 
         if (object.trans != undefined) {
-            gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                m.translate(object.trans.dx, object.trans.dy, object.trans.dz).conversion() 
+            gl.uniformMatrix4fv(translationMatrix, gl.FALSE, new Float32Array(
+                new Matrix4x4().translate(object.trans.dx, object.trans.dy, object.trans.dz).conversion() 
             ));
 
-            m = m.translate(object.trans.dx, object.trans.dy, object.trans.dz);
 
         }
 
-        if (object.scalation != undefined) {
+        if (object.scaling != undefined) {
             gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
-                m.scale(object.scalation.sx, object.scalation.sy, object.scalation.sz).conversion() 
+                new Matrix4x4().scale(object.scaling.sx, object.scaling.sy, object.scaling.sz).conversion() 
             ));
-
-            // JD: Is this a typo?  You are calling translate here, but the matrix
-            //     you pass into WebGL is a scale.
-            m = m.translate(object.trans.dx, object.trans.dy, object.trans.dz);
 
         }
         // Set the varying vertex coordinates.
@@ -380,15 +367,16 @@
         
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
+
         // This will draw any substructure of a composite object
         if (object.childSubstructure){
             for(var e = 0; e < object.childSubstructure.length; e++ ){
-                object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? object.childSubstructure[e].axis :
-                    object.axis;
+                object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? 
+                    object.childSubstructure[e].axis : object.axis;
                 object.childSubstructure[e].trans = (object.childSubstructure[e].trans) ?
                     object.childSubstructure[e].trans : object.trans;
-                object.childSubstructure[e].scalation = (object.childSubstructure[e].scalation) ?
-                    object.childSubstructure[e].scalation : object.scalation;
+                object.childSubstructure[e].scaling = (object.childSubstructure[e].scaling) ?
+                    object.childSubstructure[e].scaling : object.scaling;
 
                 passToWebGL(object.childSubstructure[e]);
                 drawObject(object.childSubstructure[e]);
@@ -404,9 +392,6 @@
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // Set up the rotation matrix.
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
-                new Matrix4x4().conversion()));
         // Display the objects.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
             drawObject(objectsToDraw[i]);
@@ -488,15 +473,15 @@
                     ));
                     tweens.push(createTween(
                         startKeyframe.sx, 1, endKeyframe.sx, 1,
-                        "scalation", "sx"
+                        "scaling", "sx"
                     ));
                     tweens.push(createTween(
                         startKeyframe.sy, 1, endKeyframe.sy, 1,
-                        "scalation", "sy"
+                        "scaling", "sy"
                     ));
                     tweens.push(createTween(
                         startKeyframe.sz, 1, endKeyframe.sz, 1,
-                        "scalation", "sz"
+                        "scaling", "sz"
                     ));
                     tweens.push(createTween(
                         startKeyframe.rotate * Math.PI / 180, 0,
@@ -520,10 +505,6 @@
 
                     // Set the object's instance transform according to the tweened
                     // values.  *** not currently recursive ***
-                    // JD: ^^^Don't forget that what I *didn't* do for you here is
-                    //     provide support for the full composite object structure.
-                    //     You will want this for objects that have internal parts
-                    //     that also animate on their own.
                     for (k = 0, maxK = tweens.length; k < maxK; k += 1) {
                         transformSetting = objectsToDraw[i][tweens[k].transform];
                         if (!transformSetting) {
@@ -547,7 +528,7 @@
 
     gl.uniformMatrix4fv( projectionMatrix,
         gl.FALSE, new Float32Array(
-            new Matrix4x4().frustum(-5, 5, -5, 5, 10, 1000).conversion()
+            new Matrix4x4().frustum(-1, 1, -1, 1,10, 1000).conversion()
         )
     );
 
@@ -561,7 +542,7 @@
             currentInterval = null;
         } else {
             currentInterval = setInterval(function () {
-                currentRotation += 1.0;
+                //currentRotation += 1.0;
 
                 // Note how we tween from the repeated-call, and not
                 // drawScene.  This allows us to invoke drawScene for
@@ -570,9 +551,7 @@
                 tweenScene();
 
                 drawScene();
-                if (currentRotation >= 360.0) {
-                    currentRotation -= 360.0;
-                }
+
             }, 30);
         }
     });
