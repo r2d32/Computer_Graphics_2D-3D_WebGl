@@ -334,7 +334,12 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
-
+        // JD: You need to take a really close look at what you are doing to
+        //     the matrix m here.  You are calling each transformation *twice*.
+        //     Is that really your intent?  I strongly suggest that you log
+        //     how m changes as you travel through this code, so you can be
+        //     sure that what your code is doing as the same as what you think
+        //     the code is doing.
         if (object.axis != undefined &&
             (object.axis.x || object.axis.y || object.axis.z)) {
              gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
@@ -365,6 +370,8 @@
                 m.scale(object.scalation.sx, object.scalation.sy, object.scalation.sz).conversion() 
             ));
 
+            // JD: Is this a typo?  You are calling translate here, but the matrix
+            //     you pass into WebGL is a scale.
             m = m.translate(object.trans.dx, object.trans.dy, object.trans.dz);
 
         }
@@ -513,6 +520,10 @@
 
                     // Set the object's instance transform according to the tweened
                     // values.  *** not currently recursive ***
+                    // JD: ^^^Don't forget that what I *didn't* do for you here is
+                    //     provide support for the full composite object structure.
+                    //     You will want this for objects that have internal parts
+                    //     that also animate on their own.
                     for (k = 0, maxK = tweens.length; k < maxK; k += 1) {
                         transformSetting = objectsToDraw[i][tweens[k].transform];
                         if (!transformSetting) {

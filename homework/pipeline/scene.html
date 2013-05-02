@@ -27,6 +27,16 @@
 
         <!-- Shapes is a library that generates "canned" shapes. -->
         <script src="shapes.js"></script>
+
+        <!-- JD: Clearly you are using a particular matrix4x4.js file
+                 here.  And yet you have a bunch of files in the
+                 Matrix4x4, including a unit test *that does not test
+                 the file you are using here*.
+                 
+                 So overall, you have some cleaning up and reorganizing
+                 to do in this department.  Not doing so decreases the
+                 maintainability and understandability of the code base.
+        -->
         <script src="matrix4x4.js"></script>
 
         <!-- Set up shaders: we've placed the source in script elements for
