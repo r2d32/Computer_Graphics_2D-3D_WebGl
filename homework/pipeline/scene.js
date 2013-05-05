@@ -21,13 +21,18 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
+
         modelViewMatrix,
-        rotationMatrix,
-        //HW
-        // Projection matrix
-        projectionMatrix, 
+        rotationMatrix,        
+        projectionMatrix,
+ 
         vertexPosition,
         vertexColor,
+
+        // Variables that involve lighting.
+        normalVector,
+        lightPosition,
+        lightDiffuse,
 
         // The all-important (for tweening) currentFrame variable.
         currentFrame = 0,
@@ -68,11 +73,12 @@
     objectsToDraw = [
          
         {
-            color: {r: 1, g: 0, b: 0},
-            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.LINES,
-            //axis: { x: 0.5, y: 0.0, z: 1.0 },
+            color: {r: 1, g: 0, b: 1},
+            vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
+            mode: gl.TRIANGLES,
+            normals: Shapes.toVertexNormalArray(Shapes.pyramid()),
             trans: { dx: -5, dy: 5.0, dz: -9 },
+            scaling: {sx:30,sy:200,sz:30},
             keyframes: [
                 {
                     frame: 0,
@@ -118,11 +124,38 @@
                 }
             ]
         },
+
+        {
+            color: {r: 1, g: 9, b: 0},
+            vertices: Shapes.toRawTriangleArray(Shapes.backg()),
+            mode: gl.TRIANGLES,
+            normals: Shapes.toVertexNormalArray(Shapes.backg()),
+            trans: { dx: -5, dy: 5.0, dz: -9 },
+            scaling: {sx:30,sy:200,sz:30},
+            keyframes: [
+                {
+                    frame: 0,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: 0,
+                    ty: 0,
+                    tz: -600
+                },
+                {
+                    frame: 600,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    tx: 0,
+                    ty: 0,
+                    tz: -600
+                },
+            ]
+        },
+            
         {   
             color: {r: 1, g: 1, b: 0},
-            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+            vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
-            axis: { x: 0.5, y: 5.0, z: 1.0,  theta:90},
+            normals: Shapes.toNormalArray(Shapes.xWing()),
+            //axis: { x: 0.5, y: 5.0, z: 1.0 },
             trans: { dx: -5, dy: 5.0, dz: -7.0 },
             scaling: {sx:3,sy:3,sz:3}
         },
@@ -130,6 +163,7 @@
 
             color: {r:0.98, g: 0.98, b:0.98},
             vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
+            normals: Shapes.toNormalArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
             mode2: gl.LINES,
             trans: { dx: 0, dy: 0, dz: -7.0 },
@@ -138,41 +172,43 @@
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
                     vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
+                    normals: Shapes.toVertexNormalArray(Shapes.xWing().childStructure ),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
-                    vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
-                    mode: gl.LINES,
-                },
-                {
-                    color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0,0.6,-0.33)),
+                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,0,0.6,-0.33)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0,0.6,0.33)),
+                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,0,0.6,0.33)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0.33,0.6,0)),
+                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,0.33,0.6,0)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,-0.33,0.6,0)),
+                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,-0.33,0.6,0)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: { r: 0.6, g: 0.6, b: 0.6 },
                     vertices: Shapes.toRawTriangleArray(Shapes.cabin()),
+                    normals: Shapes.toVertexNormalArray(Shapes.cabin()),
                     mode: gl.TRIANGLES
                 },
                 {
                     color: { r: 0.0, g: 0.0, b: 0.6 },
                     vertices: Shapes.toRawTriangleArray(Shapes.glass()),
+                    normals: Shapes.toVertexNormalArray(Shapes.glass()),
                     mode: gl.TRIANGLES
                 },
                 {
@@ -231,6 +267,7 @@
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },
             vertices: Shapes.toRawLineArray(Shapes.pyramid()),
+            normals: Shapes.toNormalArray(Shapes.pyramid()),
             mode: gl.TRIANGLES,
         }
         
@@ -257,6 +294,9 @@
         }
         objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].colors);
+        // One more buffer: normals.
+        objectsToDraw[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
+                objectsToDraw[i].normals);
     }
 
     // Initialize the shaders.
@@ -293,12 +333,17 @@
     gl.enableVertexAttribArray(vertexPosition);
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
+    normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
+    gl.enableVertexAttribArray(normalVector);
 
 
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
     translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");
     modelViewMatrix = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
     projectionMatrix = gl.getUniformLocation(shaderProgram,"projectionMatrix");
+
+    lightPosition = gl.getUniformLocation(shaderProgram, "lightPosition");
+    lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
 
     /*
      * Passes substructure objects to WebGL
@@ -340,7 +385,7 @@
             (object.axis.x || object.axis.y || object.axis.z)) {
              gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
                 new Matrix4x4().rotate(
-                    object.axis.theta ,
+                    object.axis.theta || 180,
                     object.axis.x, object.axis.y, object.axis.z
                 ).conversion()
             ));
@@ -362,9 +407,12 @@
             ));
 
         }
+        // Set the varying normal vectors.
+        gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
+        gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
+
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
-        
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
 
@@ -532,6 +580,10 @@
         )
     );
 
+    // Set up our one light source and color.  Note the uniform3fv function.
+    gl.uniform3fv(lightPosition, [5.0, 1.0, 1.0]);
+    gl.uniform3fv(lightDiffuse, [1.0, 1.0, 1.0]);
+
     // Draw the initial scene.
     drawScene();
 
@@ -551,7 +603,9 @@
                 tweenScene();
 
                 drawScene();
-
+                //if (currentRotation >= 360.0) {
+                //    currentRotation -= 360.0;
+                //}
             }, 30);
         }
     });

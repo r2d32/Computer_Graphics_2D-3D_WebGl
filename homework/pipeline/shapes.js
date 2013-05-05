@@ -5,6 +5,7 @@
  */
 var Shapes = {
 
+
     getIndices: function (a) {
         var b =[];
         for (var e = 0; e < a.length; e++){
@@ -20,6 +21,23 @@ var Shapes = {
         return b;
         
     },
+
+    backg: function (){
+        var v =[
+                [ -400, 0, 600 ],
+                [ 400, 0, -220 ],
+                [ 20, 0, -400 ],
+                
+            ];
+
+        return {
+            vertices: v,
+
+            indices: Shapes.getIndices(v)
+        };
+    },
+    
+
     /*
      * Returns the vertices for a small pyramid.
      */
@@ -165,25 +183,23 @@ var Shapes = {
             indChild = [],
             childZcenter = 0,
             childYheight = -0.2;
-        for (var i = 0; i <= numberOfSides;i += 1) {
-          
+
+        for (var i = 0; i <= numberOfSides;i += 1) {          
             v[i] =  [Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides) ,Ycenter ,
                      Zcenter + size * Math.sin(i * 2 * Math.PI / numberOfSides) ];
         }
+
         //This adds the tip coordinate at the end of the array 
         v[numberOfSides] = [ Xcenter,Yheight,Zcenter ]; 
 
         for (i = 0; i < numberOfSides; i += 1) {
-
             ind.push([numberOfSides, i, (i + 1) % numberOfSides]);
         }
 
         //Create Child
         for (var i = 0; i < childSides;i += 1) {
- 
             vChild[i] =  [childXcenter + childSize * Math.cos(i * 2 * Math.PI / childSides) , childYcenter ,
                      childZcenter + childSize * Math.sin(i * 2 * Math.PI / childSides) ];
-
             vChild[ i + childSides ] = [ vChild[i][0], childYheight, vChild[i][2] ];
         }
 
@@ -210,6 +226,55 @@ var Shapes = {
             
         };
     },
+
+    icosahedron: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var X = 0.525731112119133606,
+            Z = 0.850650808352039932;
+
+        return {
+            vertices: [
+                [ -X, 0.0, Z ],
+                [ X, 0.0, Z ],
+                [ -X, 0.0, -Z ],
+                [ X, 0.0, -Z ],
+                [ 0.0, Z, X ],
+                [ 0.0, Z, -X ],
+                [ 0.0, -Z, X ],
+                [ 0.0, -Z, -X ],
+                [ Z, X, 0.0 ],
+                [ -Z, X, 0.0 ],
+                [ Z, -X, 0.0 ],
+                [ -Z, -X, 0.0 ]
+            ],
+
+            indices: [
+                [ 1, 4, 0 ],
+                [ 4, 9, 0 ],
+                [ 4, 5, 9 ],
+                [ 8, 5, 4 ],
+                [ 1, 8, 4 ],
+                [ 1, 10, 8 ],
+                [ 10, 3, 8 ],
+                [ 8, 3, 5 ],
+                [ 3, 2, 5 ],
+                [ 3, 7, 2 ],
+                [ 3, 10, 7 ],
+                [ 10, 6, 7 ],
+                [ 6, 11, 7 ],
+                [ 6, 0, 11 ],
+                [ 6, 1, 0 ],
+                [ 10, 1, 6 ],
+                [ 11, 0, 9 ],
+                [ 2, 11, 9 ],
+                [ 5, 2, 9 ],
+                [ 11, 2, 7 ]
+            ]
+        };
+    },
+
+
+
     /*
      * Returns the vertices for pencil body.
      */
@@ -298,6 +363,83 @@ var Shapes = {
         }
 
         return result;
-    }
+    },
 
+    /*
+     * Another utility function for computing normals, this time just converting
+     * every vertex into its unit vector version.  This works mainly for objects
+     * that are centered around the origin.
+     */
+    toVertexNormalArray: function (indexedVertices) {
+        var result = [],
+            i,
+            j,
+            maxi,
+            maxj,
+            p,
+            normal;
+
+        // For each face...
+        for (i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            // For each vertex in that face...
+            for (j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                p = indexedVertices.vertices[indexedVertices.indices[i][j]];
+                normal = new Vector(p[0], p[1], p[2]).unit();
+                result = result.concat(
+                    [ normal.x(), normal.y(), normal.z() ]
+                );
+            }
+        }
+
+        return result;
+    },
+        
+    /*
+     * Utility function for computing normal vectors based on indexed vertices.
+     * The secret: take the cross product of each triangle.  Note that vertex order
+     * now matters---the resulting normal faces out from the side of the triangle
+     * that "sees" the vertices listed counterclockwise.
+     *
+     * The vector computations involved here mean that the Vector module must be
+     * loaded up for this function to work.
+     */
+    toNormalArray: function (indexedVertices) {
+        var result = [],
+            i,
+            j,
+            maxi,
+            maxj,
+            p0,
+            p1,
+            p2,
+            v0,
+            v1,
+            v2,
+            normal;
+
+        // For each face...
+        for (i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            // We form vectors from the first and second then second and third vertices.
+            p0 = indexedVertices.vertices[indexedVertices.indices[i][0]];
+            p1 = indexedVertices.vertices[indexedVertices.indices[i][1]];
+            p2 = indexedVertices.vertices[indexedVertices.indices[i][2]];
+            console.log('here')
+
+            // Technically, the first value is not a vector, but v can stand for vertex
+            // anyway, so...
+            v0 = new Vector(p0[0], p0[1], p0[2]);
+            v1 = new Vector(p1[0], p1[1], p1[2]).subtract(v0);
+            v2 = new Vector(p2[0], p2[1], p2[2]).subtract(v0);
+            normal = v1.cross(v2).unit();
+
+            // We then use this same normal for every vertex in this face.
+            for (j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                result = result.concat(
+                    [ normal.x(), normal.y(), normal.z() ]
+                );
+            }
+        }
+
+        return result;
+    },
 };
