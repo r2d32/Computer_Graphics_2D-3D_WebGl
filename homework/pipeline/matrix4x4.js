@@ -98,7 +98,18 @@ var Matrix4x4 = (function () {
         return this.elements;
     };
 
+    // JD: Part of the problem is that you are doing different things in
+    //     each of these transform functions.  Be consistent.  I will
+    //     spell out what you are doing in each function.  Pick one
+    //     approach (except for translate) and stick with it.
+    //
+    //     There is no absolute right or wrong design---what matters is
+    //     that you pick one and use it consistently.
+
     //  Scaling matrix method
+    // JD: In this function, you are creating the "pure" scale matrix
+    //     and then are multiplying it to the receiver.  You are thus
+    //     scaling the prior transform.
     matrix4x4.prototype.scale = function (sx,sy,sz){
 
         var scalator = new Matrix4x4(sx, 0, 0, 0,
@@ -113,6 +124,13 @@ var Matrix4x4 = (function () {
     };
 
     // Traslating matrix method
+    // JD: This is the only function where you are doing something that
+    //     is distinctly incorrect.  You are getting the incoming transform,
+    //     then just *plugging* the translate delta (dx, dy, dz) directly
+    //     into the 4th column of the matrix.  This is incorrect because
+    //     the incoming transform might already have values in there---by
+    //     doing a direct assignment, and not actually doing matrix
+    //     multiplication, you would be wiping out those prior values.
     matrix4x4.prototype.translate = function (dx,dy,dz){
         var translated = new Matrix4x4();
         translated.elements = this.elements;    
@@ -125,6 +143,9 @@ var Matrix4x4 = (function () {
 
 
     // Matrix rotation
+    // JD: Finally, in this function, you are not touching the receiving
+    //     matrix at all.  You are just returning the "pure" rotation
+    //     matrix.
     matrix4x4.prototype.rotate = function (angle, x, y, z){
         var axisLength = Math.sqrt((x * x) + (y * y) + (z * z)),
                 s = Math.sin(angle * Math.PI / 180.0),

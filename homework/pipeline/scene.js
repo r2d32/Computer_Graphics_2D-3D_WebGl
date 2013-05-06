@@ -214,6 +214,7 @@
                 {
                     color: {r:0.98, g: 0.98, b:0.98},
                     vertices: Shapes.toRawTriangleArray(Shapes.wings()),
+                    // JD: The normals are missing here.
                     mode: gl.TRIANGLES,
                     mode2: gl.LINES,
                 }
@@ -266,6 +267,8 @@
 
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },
+            // JD: You have a mode of gl.TRIANGLES but you were sending
+            //     in a line array.  Those don't match.
             vertices: Shapes.toRawLineArray(Shapes.pyramid()),
             normals: Shapes.toNormalArray(Shapes.pyramid()),
             mode: gl.TRIANGLES,
@@ -275,6 +278,10 @@
     ];
 
     // Pass the vertices to WebGL.
+    // JD: Remember, your subobjects (at arbitrary depth) will need to
+    //     be processed in this way also.  You have defined a passToWebGL
+    //     function a few lines below which does some of this, but not all
+    //     of it.
     for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
         objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].vertices);
@@ -348,6 +355,7 @@
     /*
      * Passes substructure objects to WebGL
      */
+    // JD: Compare this to the processing code a few lines up.  See a difference?
     passToWebGL = function (child){
 
         child.buffer = GLSLUtilities.initVertexBuffer(gl,
@@ -381,6 +389,15 @@
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
 
+        // JD: Consider this---in these three if statements, you are setting a
+        //     transform if the corresponding property (axis, trans, scaling)
+        //     exists.  If it doesn't, then you skip setting the matrix.
+        //     So now, answer this---***what is the value of that matrix at
+        //     that point?***
+        //
+        //     This is one of the issues that you are seeing with your
+        //     rotation code.  Of course, as you can see with my other
+        //     comments, you do have other issues too.
         if (object.axis != undefined &&
             (object.axis.x || object.axis.y || object.axis.z)) {
              gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
@@ -419,6 +436,28 @@
         // This will draw any substructure of a composite object
         if (object.childSubstructure){
             for(var e = 0; e < object.childSubstructure.length; e++ ){
+                // JD: I see what you are trying to do here, passing on the parent's
+                //     setting in case the child does not have one.  However, this
+                //     will not work correctly---what if the child *does* have something?
+                //     Then, the parent's transform is lost.  This is another aspect
+                //     of what is wrong with your transform code.  You should:
+                //
+                //     (a) Preserve the parent's transform so that the child can "see"
+                //         it, and...
+                //
+                //     (b) ...make sure that the child's transform is relative to
+                //         that transform.  How does one transform become relative to
+                //         another?  It is *multiplied* to that transform.
+                //
+                //     Finally, remember that ***the tweening code changes these
+                //     properties***.  Thus, messing with them here will interfere
+                //     with the tweening.
+                //
+                //     Bottom line: leave these instance transform settings alone, and
+                //     build the matrices separately.  Also, pass the parent's transform
+                //     matrix to the child's drawObject call so that this transform can
+                //     be used to affect the child's transform.  Then, and only then,
+                //     will things start working in a completely correct manner.
                 object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? 
                     object.childSubstructure[e].axis : object.axis;
                 object.childSubstructure[e].trans = (object.childSubstructure[e].trans) ?
@@ -426,6 +465,11 @@
                 object.childSubstructure[e].scaling = (object.childSubstructure[e].scaling) ?
                     object.childSubstructure[e].scaling : object.scaling;
 
+                // JD: There is no need to call passToWebGL over and over.
+                //     Just "walk" through the entire scene once beforehand
+                //     and you're done.  You only need to do passWebGL again
+                //     if you create new objects and and them to your scene
+                //     on the fly.
                 passToWebGL(object.childSubstructure[e]);
                 drawObject(object.childSubstructure[e]);
             }
