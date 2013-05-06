@@ -138,7 +138,7 @@ var Matrix4x4 = (function () {
         translated.elements[7] = dy;
         translated.elements[11] = dz;
 
-        return translated;
+        return translated.multiply(this);
     };
 
 
@@ -179,7 +179,7 @@ var Matrix4x4 = (function () {
             (x2 * oneMinusC) + c,   (xy * oneMinusC) - zs,  (xz * oneMinusC) + ys, 0,
             (xy * oneMinusC) + zs,   (y2 * oneMinusC) + c,  (yz * oneMinusC) - xs, 0,
             (xz * oneMinusC) - ys,  (yz * oneMinusC) + xs,   (z2 * oneMinusC) + c, 0,
-                                0,                      0,                      0, 1);
+                                0,                      0,                      0, 1).multiply(this);
     };
     
     // Matrix frustum perspective

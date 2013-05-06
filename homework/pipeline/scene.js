@@ -76,7 +76,7 @@
             color: {r: 1, g: 0, b: 1},
             vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
             mode: gl.TRIANGLES,
-            normals: Shapes.toVertexNormalArray(Shapes.pyramid()),
+            normals: Shapes.toNormalArray(Shapes.pyramid()),
             trans: { dx: -5, dy: 5.0, dz: -9 },
             scaling: {sx:30,sy:200,sz:30},
             keyframes: [
@@ -129,7 +129,7 @@
             color: {r: 1, g: 9, b: 0},
             vertices: Shapes.toRawTriangleArray(Shapes.backg()),
             mode: gl.TRIANGLES,
-            normals: Shapes.toVertexNormalArray(Shapes.backg()),
+            normals: Shapes.toNormalArray(Shapes.backg()),
             trans: { dx: -5, dy: 5.0, dz: -9 },
             scaling: {sx:30,sy:200,sz:30},
             keyframes: [
@@ -149,72 +149,62 @@
                 },
             ]
         },
-            
-        {   
-            color: {r: 1, g: 1, b: 0},
-            vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
-            mode: gl.TRIANGLES,
-            normals: Shapes.toNormalArray(Shapes.xWing()),
-            //axis: { x: 0.5, y: 5.0, z: 1.0 },
-            trans: { dx: -5, dy: 5.0, dz: -7.0 },
-            scaling: {sx:3,sy:3,sz:3}
-        },
+
         {
 
             color: {r:0.98, g: 0.98, b:0.98},
             vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
             normals: Shapes.toNormalArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
-            mode2: gl.LINES,
             trans: { dx: 0, dy: 0, dz: -7.0 },
             axis: { x: 2, y:3, z: 3.5 , theta: 180 },
-            childSubstructure:[
+            childSubstructure: [/*
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
                     vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
-                    normals: Shapes.toVertexNormalArray(Shapes.xWing().childStructure ),
+                    normals: Shapes.toNormalArray(Shapes.xWing().childStructure ),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0,0.6,-0.33)),
-                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,0,0.6,-0.33)),
+                    normals: Shapes.toNormalArray(Shapes.cilinder(16,0,0.6,-0.33)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0,0.6,0.33)),
-                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,0,0.6,0.33)),
+                    normals: Shapes.toNormalArray(Shapes.cilinder(16,0,0.6,0.33)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0.33,0.6,0)),
-                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,0.33,0.6,0)),
+                    normals: Shapes.toNormalArray(Shapes.cilinder(16,0.33,0.6,0)),
                     mode: gl.TRIANGLES,
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,-0.33,0.6,0)),
-                    normals: Shapes.toVertexNormalArray(Shapes.cilinder(16,-0.33,0.6,0)),
+                    normals: Shapes.toNormalArray(Shapes.cilinder(16,-0.33,0.6,0)),
                     mode: gl.TRIANGLES,
-                },
+                },*/
                 {
                     color: { r: 0.6, g: 0.6, b: 0.6 },
                     vertices: Shapes.toRawTriangleArray(Shapes.cabin()),
-                    normals: Shapes.toVertexNormalArray(Shapes.cabin()),
+                    normals: Shapes.toNormalArray(Shapes.cabin()),
                     mode: gl.TRIANGLES
                 },
                 {
                     color: { r: 0.0, g: 0.0, b: 0.6 },
                     vertices: Shapes.toRawTriangleArray(Shapes.glass()),
-                    normals: Shapes.toVertexNormalArray(Shapes.glass()),
+                    normals: Shapes.toNormalArray(Shapes.glass()),
                     mode: gl.TRIANGLES
                 },
                 {
                     color: {r:0.98, g: 0.98, b:0.98},
                     vertices: Shapes.toRawTriangleArray(Shapes.wings()),
-                    // JD: The normals are missing here.
+                    normals: Shapes.toNormalArray(Shapes.wings()),
                     mode: gl.TRIANGLES,
                     mode2: gl.LINES,
                 }
@@ -225,6 +215,7 @@
                 {
                     frame: 0,
                     ease: KeyframeTweener.quadEaseOut,
+                    transfor:{axis: { x: 2, y:3, z: 3.5 , theta: 180 }},
                     tx: 0,
                     ty: 0,
                     tz: -1
@@ -233,6 +224,8 @@
                 {
                     frame: 200,
                     ease: KeyframeTweener.quadEaseInAndOut,
+                    axis: { x: 2, y:3, z: 3.5 , theta: 180 },
+                    
                     tx: 2,
                     ty: -2,
                     tz: -20
@@ -241,6 +234,8 @@
                 {
                     frame: 400,
                     ease: KeyframeTweener.cubicEaseIn,
+                    axis: { x: 2, y:3, z: 3.5 , theta: 180 },
+                    
                     tx: 1.5,
                     ty: -1.5,
                     tz: -30
@@ -249,6 +244,8 @@
                 {
                     frame: 500,
                     ease: KeyframeTweener.quadEaseOut,
+                    axis: { x: 2, y:3, z: 3.5 , theta: 180 },
+                    
                     tx: 1.7,
                     ty: -1.7,
                     tz: -25,
@@ -265,14 +262,14 @@
             ]
         },
 
-        {
+        /*{
             color: { r: 0.0, g: 0.0, b: 1.0 },
             // JD: You have a mode of gl.TRIANGLES but you were sending
             //     in a line array.  Those don't match.
             vertices: Shapes.toRawLineArray(Shapes.pyramid()),
             normals: Shapes.toNormalArray(Shapes.pyramid()),
             mode: gl.TRIANGLES,
-        }
+        }*/
         
 
     ];
@@ -376,7 +373,10 @@
         }
         child.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
                 child.colors);
-        
+  
+        // One more buffer: normals.
+        child.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                child.normals);
 
     }
 
@@ -388,6 +388,18 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
+        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
+                new Matrix4x4().conversion()));
+        gl.uniformMatrix4fv(translationMatrix, gl.FALSE, new Float32Array(
+                new Matrix4x4().conversion()));
+        gl.uniformMatrix4fv(modelViewMatrix, gl.FALSE, new Float32Array(
+                new Matrix4x4().conversion()));
+
+        var parentTransform = {
+            axis: object.axis,
+            trans: object.trans,
+            scaling: object.scaling,
+        } 
 
         // JD: Consider this---in these three if statements, you are setting a
         //     transform if the corresponding property (axis, trans, scaling)
@@ -408,7 +420,7 @@
             ));
 
 
-        }
+        } 
 
         if (object.trans != undefined) {
             gl.uniformMatrix4fv(translationMatrix, gl.FALSE, new Float32Array(
@@ -459,11 +471,11 @@
                 //     be used to affect the child's transform.  Then, and only then,
                 //     will things start working in a completely correct manner.
                 object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? 
-                    object.childSubstructure[e].axis : object.axis;
+                    object.childSubstructure[e].axis : parentTransform.axis;
                 object.childSubstructure[e].trans = (object.childSubstructure[e].trans) ?
-                    object.childSubstructure[e].trans : object.trans;
+                    object.childSubstructure[e].trans : parentTransform.trans;
                 object.childSubstructure[e].scaling = (object.childSubstructure[e].scaling) ?
-                    object.childSubstructure[e].scaling : object.scaling;
+                    object.childSubstructure[e].scaling : parentTransform.scaling;
 
                 // JD: There is no need to call passToWebGL over and over.
                 //     Just "walk" through the entire scene once beforehand
@@ -600,6 +612,7 @@
                     for (k = 0, maxK = tweens.length; k < maxK; k += 1) {
                         transformSetting = objectsToDraw[i][tweens[k].transform];
                         if (!transformSetting) {
+                            console.log('one');
                             transformSetting = {};
                             objectsToDraw[i][tweens[k].transform] = transformSetting;
                         }
