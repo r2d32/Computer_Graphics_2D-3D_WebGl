@@ -16,6 +16,8 @@ var NanoshopNeighborhood = {
         ];
     },
     /*
+    // JD: You resolve merge conflicts with comments---really???
+    //     There is a much better way to do this.
 <<<<<<< HEAD
      * A filter that applies a blued diagonal blur to the image
      */    
