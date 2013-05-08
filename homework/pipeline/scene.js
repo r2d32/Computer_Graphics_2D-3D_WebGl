@@ -157,9 +157,9 @@
             normals: Shapes.toNormalArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
             trans: { dx: 0, dy: 0, dz: -20 },
-            scaling: {sx: 1,sy: 1,sz: 0.5},
-            axis: { x: 0, y:1, z: 0, theta: 90 },
-            childSubstructure: [
+            scaling: {sx: 1,sy: 1,sz: 1},
+            axis: { x: 1, y:0, z: 0, theta: 90 },
+            /*childSubstructure: [
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
                     vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
@@ -210,13 +210,14 @@
                     mode2: gl.LINES,
                 }
 
-            ],
+            ],*/
 
             keyframes: [
                 {
                     frame: 0,
                     ease: KeyframeTweener.quadEaseOut,
-                    transfor:{axis: { x: 2, y:3, z: 3.5 , theta: 180 }},
+                    scaling: { sx:1, sy:3, sz: 3.5 },
+                    axis: { x: 0, y:0, z: 1, theta: 180 },
                     tx: 0,
                     ty: 0,
                     tz: -1
@@ -225,8 +226,8 @@
                 {
                     frame: 200,
                     ease: KeyframeTweener.quadEaseInAndOut,
-                    axis: { x: 2, y:3, z: 3.5 , theta: 180 },
-                    
+                    scaling: { sx:1, sy:3, sz: 3.5 },
+                    axis: { x: 0, y:0, z: 1, theta: 90 },
                     tx: 2,
                     ty: -2,
                     tz: -20
@@ -235,8 +236,8 @@
                 {
                     frame: 400,
                     ease: KeyframeTweener.cubicEaseIn,
-                    axis: { x: 2, y:3, z: 3.5 , theta: 180 },
-                    
+                    scaling: { sx:10, sy:10, sz: 40 },
+                    axis: { x: 0, y:0, z: 1 , theta: 10 },
                     tx: 1.5,
                     ty: -1.5,
                     tz: -30
@@ -245,8 +246,8 @@
                 {
                     frame: 500,
                     ease: KeyframeTweener.quadEaseOut,
-                    axis: { x: 2, y:3, z: 3.5 , theta: 180 },
-                    
+                    axis: { x: 0, y:0, z: 1 , theta: -90 },
+                    scaling: { sx:1, sy:1, sz: 1 },
                     tx: 1.7,
                     ty: -1.7,
                     tz: -25,
@@ -256,6 +257,8 @@
                 {
                     frame: 1500,
                     ease: KeyframeTweener.elastic,
+                    scaling: { sx:1, sy:150, sz: 3.5 },
+                    axis: { x: 0, y:0, z: 1, theta: -180 },
                     tx: 0,
                     ty:0,
                     tz: -5000,
@@ -389,8 +392,7 @@
             axis: object.axis,
             trans: object.trans,
             scaling: object.scaling,
-        } 
-
+        };
         // JD: Consider this---in these three if statements, you are setting a
         //     transform if the corresponding property (axis, trans, scaling)
         //     exists.  If it doesn't, then you skip setting the matrix.
@@ -566,32 +568,32 @@
                         "trans", "dz"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.sx, 1, endKeyframe.sx, 1,
+                        startKeyframe.scaling.sx, 1, endKeyframe.scaling.sx, 1,
                         "scaling", "sx"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.sy, 1, endKeyframe.sy, 1,
+                        startKeyframe.scaling.sy, 1, endKeyframe.scaling.sy, 1,
                         "scaling", "sy"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.sz, 1, endKeyframe.sz, 1,
+                        startKeyframe.scaling.sz, 1, endKeyframe.scaling.sz, 1,
                         "scaling", "sz"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.rotate * Math.PI / 180, 0,
-                        endKeyframe.rotate * Math.PI / 180, 0,
+                        startKeyframe.axis.theta/* * Math.PI / 180*/, 0,
+                        endKeyframe.axis.theta/* * Math.PI / 180*/, 0,
                         "axis", "theta"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.rx, 0, endKeyframe.rx, 0,
+                        startKeyframe.axis.x, 0, endKeyframe.axis.x, 0,
                         "axis", "x"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.ry, 0, endKeyframe.ry, 0,
+                        startKeyframe.axis.y, 0, endKeyframe.axis.y, 0,
                         "axis", "y"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.rz, 0, endKeyframe.rz, 0,
+                        startKeyframe.axis.z, 0, endKeyframe.axis.z, 0,
                         "axis", "z"
                     ));
                     currentTweenFrame = currentFrame - startKeyframe.frame;
