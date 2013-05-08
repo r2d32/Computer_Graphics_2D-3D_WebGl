@@ -11,6 +11,7 @@ var Primitives = {
         context.save();
         context.fillStyle = "rgb(" + parseInt(r, 10) + "," +
                 parseInt(g, 10) + "," + parseInt(b, 10) + ")";
+
         context.fillRect(x, y, 1, 1);
         context.restore();
     },
@@ -43,8 +44,8 @@ var Primitives = {
             fillRectNoColor = function () {
                 // The rendering context will just ignore the
                 // undefined colors in this case.
-                for (i = y; i < bottom; i += 1) {
-                    for (j = x; j < right; j += 1) {
+                for ( i = y; i < bottom; i += 1 ) {
+                    for ( j = x; j < right; j += 1 ) {
                         module.setPixel(context, j, i);
                     }
                 }
@@ -52,8 +53,8 @@ var Primitives = {
 
             fillRectOneColor = function () {
                 // Single color all the way through.
-                for (i = y; i < bottom; i += 1) {
-                    for (j = x; j < right; j += 1) {
+                for ( i = y; i < bottom; i += 1 ) {
+                    for ( j = x; j < right; j += 1 ) {
                         module.setPixel(context, j, i, c1[0], c1[1], c1[2]);
                     }
                 }
@@ -61,8 +62,8 @@ var Primitives = {
 
             fillRectTwoColors = function () {
                 // This modifies the color vertically only.
-                for (i = y; i < bottom; i += 1) {
-                    for (j = x; j < right; j += 1) {
+                for ( i = y; i < bottom; i += 1 ) {
+                    for ( j = x; j < right; j += 1 ) {
                         module.setPixel(context, j, i,
                                 leftColor[0],
                                 leftColor[1],
@@ -97,9 +98,10 @@ var Primitives = {
                     }
 
                     // The color on each side "grades" at different rates.
-                    leftColor[0] += leftVDelta[0];
-                    leftColor[1] += leftVDelta[1];
-                    leftColor[2] += leftVDelta[2];
+                    leftColor[0]  += leftVDelta[0];
+                    leftColor[1]  += leftVDelta[1];
+                    leftColor[2]  += leftVDelta[2];
+
                     rightColor[0] += rightVDelta[0];
                     rightColor[1] += rightVDelta[1];
                     rightColor[2] += rightVDelta[2];
@@ -170,6 +172,7 @@ var Primitives = {
             err = 0;
 
         color = color || [0, 0, 0];
+
         while (true) {
             this.setPixel(context, x, y, color[0], color[1], color[2]);
             if (x === x2) {
@@ -252,10 +255,7 @@ var Primitives = {
 
         color = color || [0, 0, 0];
         while (true) {
-            // JD: dash > 0 *and* dash > 1???  Isn't that just dash > 1?
-            //     Note also that you can take advantage of truthiness in
-            //     JavaScript to make the last condition shorter (if you
-            //     can't see how, ask me sometime).
+
             if (dash > 1 && ( currentLength % (dash + 1) ) > 0 ){
                 this.setPixel(context, x, y, color[0], color[1], color[2]);
             }
@@ -283,23 +283,6 @@ var Primitives = {
      */
     plotCirclePoints: function (context, xc, yc, x, y, color) {
         color = color || [0, 0, 200]; 
-        //var colorBase1 = color,
-        //    colorBase2 = color,
-        //    colorTop = colorTop || [0,200,0], being colorTop an argument
-        // I tried to implement it the commented out
-        // way, but it didnt work. So this is what I got 
-        // got working so far:
-        //
-        // JD 0402: Was the code above *all* the code that you had when
-        //     trying to turn the colors into parameters?  Because the
-        //     above was all there was (including in primitives-demo.js),
-        //     then that clearly doesn't work because colorTop would be
-        //     undefined.
-        //
-        //     Commit and push the *exact* and *complete* attempt to
-        //     have color parameters and I will look at that (we will
-        //     accept for this purpose that you are committing broken
-        //     code).
         var colorBase1 = [0,0,200],
             colorBase2 = [0,0,200],
             colorTop = [0,200,0],
@@ -369,6 +352,7 @@ var Primitives = {
 
         while (x < y) {
             this.plotCirclePoints(context, xc, yc, x, y, color);
+
             if (p < 0) {
                 p = p + 4 * x + 6;
             } else {
@@ -377,6 +361,7 @@ var Primitives = {
             }
             x += 1;
         }
+
         if (x === y) {
             this.plotCirclePoints(context, xc, yc, x, y, color);
         }

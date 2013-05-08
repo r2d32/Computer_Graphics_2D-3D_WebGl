@@ -34,19 +34,19 @@
     renderingContext.save();
     renderingContext.translate(5, 420);
     Primitives.fillPolygon(renderingContext, [
-        { x: 50, y: 50 },
-        { x: 50, y: 80 },
-        { x: 80, y: 100 },
-        { x: 140, y: 50 },
-        { x: 140, y: 80 },
-        { x: 110, y: 50 }
+        { x: 50 , y: 50  },
+        { x: 50 , y: 80  },
+        { x: 80 , y: 100 },
+        { x: 140, y: 50  },
+        { x: 140, y: 80  },
+        { x: 110, y: 50  }
     ]);
     renderingContext.restore();
 
     renderingContext.save();
     renderingContext.translate(210, 420);
     Primitives.fillPolygon(renderingContext, [
-        { x: 50, y: 5 },
+        { x: 50 , y: 5  },
         { x: 100, y: 80 },
         { x: 120, y: 40 }
     ]);
@@ -55,33 +55,33 @@
     renderingContext.save();
     renderingContext.translate(415, 420);
     Primitives.fillPolygon(renderingContext, [
-        { x: 30, y: 40 },
-        { x: 100, y: 40 },
+        { x: 30 , y: 40  },
+        { x: 100, y: 40  },
         { x: 100, y: 100 },
-        { x: 30, y: 100 }
+        { x: 30 , y: 100 }
     ]);
     renderingContext.restore();
 
     renderingContext.save();
     renderingContext.translate(620, 420);
     Primitives.fillPolygon(renderingContext, [
-        { x: 20, y: 20 },
-        { x: 50, y: 25 },
-        { x: 100, y: 90 },
-        { x: 50, y: 100 },
-        { x: 15, y: 80 },
-        { x: 10, y: 50 }
+        { x: 20 , y: 20  },
+        { x: 50 , y: 25  },
+        { x: 100, y: 90  },
+        { x: 50 , y: 100 },
+        { x: 15 , y: 80  },
+        { x: 10 , y: 50  }
     ]);
     renderingContext.restore();
 
     renderingContext.save();
     renderingContext.translate(825, 420);
     Primitives.fillPolygon(renderingContext, [
-        { x: 100, y: 10 },
+        { x: 100, y: 10  },
         { x: 150, y: 100 },
-        { x: 20, y: 40 },
-        { x: 180, y: 40 },
-        { x: 50, y: 100 }
+        { x: 20 , y: 40  },
+        { x: 180, y: 40  },
+        { x: 50 , y: 100 }
     ]);
     renderingContext.restore();
 
