@@ -111,15 +111,11 @@ var Matrix4x4 = (function () {
     //     and then are multiplying it to the receiver.  You are thus
     //     scaling the prior transform.
     matrix4x4.prototype.scale = function (sx,sy,sz){
-
         var scalator = new Matrix4x4(sx, 0, 0, 0,
                                       0,sy, 0, 0,
                                       0, 0, sz,0,
                                       0, 0, 0, 1);
         
-                    
-        
-
         return scalator.multiply(this);
     };
 
@@ -133,7 +129,6 @@ var Matrix4x4 = (function () {
     //     multiplication, you would be wiping out those prior values.
     matrix4x4.prototype.translate = function (dx,dy,dz){
         var translated = new Matrix4x4();
-        translated.elements = this.elements;    
         translated.elements[3] = dx;
         translated.elements[7] = dy;
         translated.elements[11] = dz;

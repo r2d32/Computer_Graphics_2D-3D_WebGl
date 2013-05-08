@@ -70,7 +70,7 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    objectsToDraw = [
+    objectsToDraw = [/*
          
         {
             color: {r: 1, g: 0, b: 1},
@@ -148,7 +148,7 @@
                     tz: -600
                 },
             ]
-        },
+        },*/
 
         {
 
@@ -156,8 +156,9 @@
             vertices: Shapes.toRawTriangleArray(Shapes.xWing()),
             normals: Shapes.toNormalArray(Shapes.xWing()),
             mode: gl.TRIANGLES,
-            trans: { dx: 0, dy: 0, dz: -7.0 },
-            axis: { x: 2, y:3, z: 3.5 , theta: 180 },
+            trans: { dx: 0, dy: 0, dz: -20 },
+            scaling: {sx: 1,sy: 1,sz: 0.5},
+            axis: { x: 0, y:1, z: 0, theta: 90 },
             childSubstructure: [
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
@@ -403,7 +404,7 @@
             (object.axis.x || object.axis.y || object.axis.z)) {
              gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
                 new Matrix4x4().rotate(
-                    object.axis.theta || 180,
+                    object.axis.theta,
                     object.axis.x, object.axis.y, object.axis.z
                 ).conversion()
             ));
