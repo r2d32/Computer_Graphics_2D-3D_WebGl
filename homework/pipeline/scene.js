@@ -158,7 +158,7 @@
             mode: gl.TRIANGLES,
             trans: { dx: 0, dy: 0, dz: -7.0 },
             axis: { x: 2, y:3, z: 3.5 , theta: 180 },
-            childSubstructure: [/*
+            childSubstructure: [
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
                     vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
@@ -188,7 +188,7 @@
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,-0.33,0.6,0)),
                     normals: Shapes.toNormalArray(Shapes.cilinder(16,-0.33,0.6,0)),
                     mode: gl.TRIANGLES,
-                },*/
+                },
                 {
                     color: { r: 0.6, g: 0.6, b: 0.6 },
                     vertices: Shapes.toRawTriangleArray(Shapes.cabin()),
@@ -260,18 +260,7 @@
                     tz: -5000,
                 },
             ]
-        },
-
-        /*{
-            color: { r: 0.0, g: 0.0, b: 1.0 },
-            // JD: You have a mode of gl.TRIANGLES but you were sending
-            //     in a line array.  Those don't match.
-            vertices: Shapes.toRawLineArray(Shapes.pyramid()),
-            normals: Shapes.toNormalArray(Shapes.pyramid()),
-            mode: gl.TRIANGLES,
-        }*/
-        
-
+        },        
     ];
 
     // Pass the vertices to WebGL.
@@ -375,7 +364,7 @@
                 child.colors);
   
         // One more buffer: normals.
-        child.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+        child.normalBuffer = GLSLUtilities.initVertexBuffer(gl,
                 child.normals);
 
     }
