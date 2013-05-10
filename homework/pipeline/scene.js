@@ -159,7 +159,7 @@
             trans: { dx: 0, dy: 0, dz: -20 },
             scaling: {sx: 1,sy: 1,sz: 1},
             axis: { x: 1, y:0, z: 0, theta: 90 },
-            /*childSubstructure: [
+            childSubstructure: [
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
                     vertices: Shapes.toRawTriangleArray(Shapes.xWing().childStructure ),
@@ -210,7 +210,7 @@
                     mode2: gl.LINES,
                 }
 
-            ],*/
+            ],
 
             keyframes: [
                 {
@@ -266,34 +266,39 @@
             ]
         },        
     ];
+    /*
+     * Passes substructure objects to WebGL
+     */
+    passToWebGL = function (child){
 
-    // Pass the vertices to WebGL.
-    // JD: Remember, your subobjects (at arbitrary depth) will need to
-    //     be processed in this way also.  You have defined a passToWebGL
-    //     function a few lines below which does some of this, but not all
-    //     of it.
-    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-        objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].vertices);
+        child.buffer = GLSLUtilities.initVertexBuffer(gl,
+                child.vertices);
 
-        if (!objectsToDraw[i].colors) {
+        if (!child.colors) {
             // If we have a single color, we expand that into an array
             // of the same color over and over.
-            objectsToDraw[i].colors = [];
-            for (j = 0, maxj = objectsToDraw[i].vertices.length / 3;
+            child.colors = [];
+            for (j = 0, maxj = child.vertices.length / 3;
                     j < maxj; j += 1) {
-                objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
-                    objectsToDraw[i].color.r,
-                    objectsToDraw[i].color.g,
-                    objectsToDraw[i].color.b
+                child.colors = child.colors.concat(
+                    child.color.r,
+                    child.color.g,
+                    child.color.b
                 );
             }
         }
-        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].colors);
+        child.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                child.colors);
+  
         // One more buffer: normals.
-        objectsToDraw[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].normals);
+        child.normalBuffer = GLSLUtilities.initVertexBuffer(gl,
+                child.normals);
+
+    }
+
+    // Pass the vertices from general objects to WebGL.
+    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+        passToWebGL(objectsToDraw[i]);
     }
 
     // Initialize the shaders.
@@ -341,37 +346,6 @@
 
     lightPosition = gl.getUniformLocation(shaderProgram, "lightPosition");
     lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
-
-    /*
-     * Passes substructure objects to WebGL
-     */
-    // JD: Compare this to the processing code a few lines up.  See a difference?
-    passToWebGL = function (child){
-
-        child.buffer = GLSLUtilities.initVertexBuffer(gl,
-                child.vertices);
-
-        if (!child.colors) {
-            // If we have a single color, we expand that into an array
-            // of the same color over and over.
-            child.colors = [];
-            for (j = 0, maxj = child.vertices.length / 3;
-                    j < maxj; j += 1) {
-                child.colors = child.colors.concat(
-                    child.color.r,
-                    child.color.g,
-                    child.color.b
-                );
-            }
-        }
-        child.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                child.colors);
-  
-        // One more buffer: normals.
-        child.normalBuffer = GLSLUtilities.initVertexBuffer(gl,
-                child.normals);
-
-    }
 
     /*
      * Displays an individual object.
