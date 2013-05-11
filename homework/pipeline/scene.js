@@ -70,7 +70,7 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    objectsToDraw = [/*
+    objectsToDraw = [
          
         {
             color: {r: 1, g: 0, b: 1},
@@ -123,7 +123,7 @@
                     tz: -100
                 }
             ]
-        },
+        },/*
 
         {
             color: {r: 1, g: 9, b: 0},
@@ -158,7 +158,7 @@
             mode: gl.TRIANGLES,
             trans: { dx: 0, dy: 0, dz: -20 },
             scaling: {sx: 1,sy: 1,sz: 1},
-            axis: { x: 1, y:0, z: 0, theta: 90 },
+            axis: { x: 7, y:9, z: 9, theta: 160 },
             childSubstructure: [
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
@@ -216,8 +216,7 @@
                 {
                     frame: 0,
                     ease: KeyframeTweener.quadEaseOut,
-                    scaling: { sx:1, sy:3, sz: 3.5 },
-                    axis: { x: 0, y:0, z: 1, theta: 180 },
+                    axis: { x: 7, y:9, z: 9, theta: 560 },
                     tx: 0,
                     ty: 0,
                     tz: -1
@@ -226,8 +225,8 @@
                 {
                     frame: 200,
                     ease: KeyframeTweener.quadEaseInAndOut,
-                    scaling: { sx:1, sy:3, sz: 3.5 },
-                    axis: { x: 0, y:0, z: 1, theta: 90 },
+                    axis: { x: 7, y:9, z: 9, theta: 160 },
+
                     tx: 2,
                     ty: -2,
                     tz: -20
@@ -236,8 +235,7 @@
                 {
                     frame: 400,
                     ease: KeyframeTweener.cubicEaseIn,
-                    scaling: { sx:10, sy:10, sz: 40 },
-                    axis: { x: 0, y:0, z: 1 , theta: 10 },
+                    axis: { x: 7, y:9, z: 9, theta: 160 },
                     tx: 1.5,
                     ty: -1.5,
                     tz: -30
@@ -246,8 +244,7 @@
                 {
                     frame: 500,
                     ease: KeyframeTweener.quadEaseOut,
-                    axis: { x: 0, y:0, z: 1 , theta: -90 },
-                    scaling: { sx:1, sy:1, sz: 1 },
+                    axis: { x: 7, y:9, z: 9, theta: 160 },
                     tx: 1.7,
                     ty: -1.7,
                     tz: -25,
@@ -257,9 +254,8 @@
                 {
                     frame: 1500,
                     ease: KeyframeTweener.elastic,
-                    scaling: { sx:1, sy:150, sz: 3.5 },
-                    axis: { x: 0, y:0, z: 1, theta: -180 },
-                    tx: 0,
+                    axis: { x: 7, y:9, z: 9, theta: 500 },
+                    tx: -200,
                     ty:0,
                     tz: -5000,
                 },
@@ -524,6 +520,20 @@
                     // Point to the start and end keyframes.
                     startKeyframe = objectsToDraw[i].keyframes[j];
                     endKeyframe = objectsToDraw[i].keyframes[j + 1];
+                    
+                    if(!startKeyframe.scaling) {
+                        startKeyframe.scaling = { sx:1, sy:1, sz: 1 };
+                    }
+                    if(!endKeyframe.scaling) {
+                        endKeyframe.scaling = { sx:1, sy:1, sz: 1 };
+                    }
+                    if(!startKeyframe.axis) {
+                        startKeyframe.axis = { x: 0, y:0, z: 0, theta: 0 };
+                    }
+                    if(!endKeyframe.axis) {
+                        endKeyframe.axis = { x: 0, y:0, z: 0, theta: 0 };
+                    }
+
 
                     // Set up our start and distance values, using defaults
                     // if necessary.
