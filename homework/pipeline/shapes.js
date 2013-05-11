@@ -24,16 +24,16 @@ var Shapes = {
 
     backg: function (){
         var v =[
-                [ -400, 0, 600 ],
-                [ 400, 0, -220 ],
-                [ 20, 0, -400 ],
+                [ -4, 0, 6 ],
+                [ 4, 0, -2 ],
+                [ 2, 0, -4 ],
                 
             ];
 
         return {
             vertices: v,
 
-            indices: Shapes.getIndices(v)
+            indices: [[0,1,2]],
         };
     },
     

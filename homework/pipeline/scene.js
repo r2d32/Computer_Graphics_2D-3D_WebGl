@@ -71,84 +71,61 @@
 
     // Build the objects to display.
     objectsToDraw = [
-         
+
         {
-            color: {r: 1, g: 0, b: 1},
+            color: {r: 0.44, g: 0.54, b: 0.56},
             vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
             mode: gl.TRIANGLES,
             normals: Shapes.toNormalArray(Shapes.pyramid()),
             trans: { dx: -5, dy: 5.0, dz: -9 },
-            scaling: {sx:30,sy:200,sz:30},
+            scaling: { sx:3000, sy:2000, sz:3000},
             keyframes: [
                 {
                     frame: 0,
                     ease: KeyframeTweener.cubicEaseIn,
-                    tx: -5,
-                    ty: 5.0,
-                    tz: -9.0
-                },
-                {
-                    frame: 100,
-                    ease: KeyframeTweener.cubicEaseIn,
-                    tx: 5,
-                    ty: 5,
-                    tz: -25
-                },
-                {
-                    frame: 200,
-                    ease: KeyframeTweener.cubicEaseIn,
-                    tx: 5,
-                    ty: -5,
-                    tz: -5
-                },
-                {
-                    frame: 300,
-                    ease: KeyframeTweener.cubicEaseIn,
-                    tx: -5,
-                    ty: -5,
-                    tz: -25
-                },
-                {
-                    frame: 400,
-                    ease: KeyframeTweener.cubicEaseIn,
-                    tx: -5,
-                    ty: 5,
-                    tz: -5
-                },
-                {
-                    frame: 500,
-                    ease: KeyframeTweener.cubicEaseIn,
+                    scaling: { sx:3000, sy:2000, sz:3000},
                     tx: 0,
                     ty: 0,
-                    tz: -100
+                    tz: -300
+                },
+                {
+                    frame: 1500,
+                    ease: KeyframeTweener.cubicEaseIn,
+                    scaling: { sx:3000, sy:2000, sz:3000},
+                    tx: 0,
+                    ty: 0,
+                    tz: -300
                 }
             ]
-        },/*
+        },
 
         {
-            color: {r: 1, g: 9, b: 0},
-            vertices: Shapes.toRawTriangleArray(Shapes.backg()),
+            color: {r: 1, g: 1, b: 1},
+            vertices: Shapes.toRawTriangleArray(Shapes.pyramid()),
             mode: gl.TRIANGLES,
-            normals: Shapes.toNormalArray(Shapes.backg()),
+            normals: Shapes.toNormalArray(Shapes.pyramid()),
             trans: { dx: -5, dy: 5.0, dz: -9 },
-            scaling: {sx:30,sy:200,sz:30},
+            scaling: { sx:30, sy:20, sz:30},
             keyframes: [
                 {
                     frame: 0,
                     ease: KeyframeTweener.cubicEaseIn,
+                    scaling: { sx:0.2, sy:1, sz:1},
                     tx: 0,
                     ty: 0,
-                    tz: -600
+                    tz: -30
                 },
                 {
-                    frame: 600,
+                    frame: 1500,
                     ease: KeyframeTweener.cubicEaseIn,
+                    scaling: { sx:0.2, sy:1, sz:1},
+                    axis: { x: 7, y:9, z: 9, theta: 500 },
                     tx: 0,
                     ty: 0,
-                    tz: -600
-                },
+                    tz: -30
+                }
             ]
-        },*/
+        },
 
         {
 
@@ -158,7 +135,7 @@
             mode: gl.TRIANGLES,
             trans: { dx: 0, dy: 0, dz: -20 },
             scaling: {sx: 1,sy: 1,sz: 1},
-            axis: { x: 7, y:9, z: 9, theta: 160 },
+            axis: { x: -7, y:9, z: 9, theta: 160 },
             childSubstructure: [
                 {
                     color: {r:0.7, g: 0.7, b:0.7},
@@ -216,7 +193,7 @@
                 {
                     frame: 0,
                     ease: KeyframeTweener.quadEaseOut,
-                    axis: { x: 7, y:9, z: 9, theta: 560 },
+                    axis: { x: 7, y:9, z: 9, theta: 100 },
                     tx: 0,
                     ty: 0,
                     tz: -1
@@ -235,7 +212,7 @@
                 {
                     frame: 400,
                     ease: KeyframeTweener.cubicEaseIn,
-                    axis: { x: 7, y:9, z: 9, theta: 160 },
+                    axis: { x: 7, y:9, z: 9, theta: 170 },
                     tx: 1.5,
                     ty: -1.5,
                     tz: -30
@@ -244,7 +221,7 @@
                 {
                     frame: 500,
                     ease: KeyframeTweener.quadEaseOut,
-                    axis: { x: 7, y:9, z: 9, theta: 160 },
+                    axis: { x: 7, y:9, z: 9, theta: 180 },
                     tx: 1.7,
                     ty: -1.7,
                     tz: -25,
@@ -252,16 +229,35 @@
                 },
 
                 {
-                    frame: 1500,
+                    frame: 700,
                     ease: KeyframeTweener.elastic,
-                    axis: { x: 7, y:9, z: 9, theta: 500 },
-                    tx: -200,
+                    axis: { x: 7, y:9, z: 9, theta: 400 },
+                    tx: -50,
                     ty:0,
-                    tz: -5000,
+                    tz: -100,
+                },
+
+                {
+                    frame: 700,
+                    ease: KeyframeTweener.elastic,
+                    axis: { x: -7, y:9, z: 9, theta: 160 },
+                    tx: -50,
+                    ty:0,
+                    tz: -100,
+                },
+
+                {
+                    frame: 900,
+                    ease: KeyframeTweener.elastic,
+                    axis: { x: -7, y:9, z: 9, theta: 160 },
+                    tx: 70,
+                    ty:0,
+                    tz: -300,
                 },
             ]
         },        
     ];
+        
     /*
      * Passes substructure objects to WebGL
      */
@@ -363,15 +359,7 @@
             trans: object.trans,
             scaling: object.scaling,
         };
-        // JD: Consider this---in these three if statements, you are setting a
-        //     transform if the corresponding property (axis, trans, scaling)
-        //     exists.  If it doesn't, then you skip setting the matrix.
-        //     So now, answer this---***what is the value of that matrix at
-        //     that point?***
-        //
-        //     This is one of the issues that you are seeing with your
-        //     rotation code.  Of course, as you can see with my other
-        //     comments, you do have other issues too.
+
         if (object.axis != undefined &&
             (object.axis.x || object.axis.y || object.axis.z)) {
              gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(
@@ -410,28 +398,7 @@
         // This will draw any substructure of a composite object
         if (object.childSubstructure){
             for(var e = 0; e < object.childSubstructure.length; e++ ){
-                // JD: I see what you are trying to do here, passing on the parent's
-                //     setting in case the child does not have one.  However, this
-                //     will not work correctly---what if the child *does* have something?
-                //     Then, the parent's transform is lost.  This is another aspect
-                //     of what is wrong with your transform code.  You should:
-                //
-                //     (a) Preserve the parent's transform so that the child can "see"
-                //         it, and...
-                //
-                //     (b) ...make sure that the child's transform is relative to
-                //         that transform.  How does one transform become relative to
-                //         another?  It is *multiplied* to that transform.
-                //
-                //     Finally, remember that ***the tweening code changes these
-                //     properties***.  Thus, messing with them here will interfere
-                //     with the tweening.
-                //
-                //     Bottom line: leave these instance transform settings alone, and
-                //     build the matrices separately.  Also, pass the parent's transform
-                //     matrix to the child's drawObject call so that this transform can
-                //     be used to affect the child's transform.  Then, and only then,
-                //     will things start working in a completely correct manner.
+         
                 object.childSubstructure[e].axis = (object.childSubstructure[e].axis)? 
                     object.childSubstructure[e].axis : parentTransform.axis;
                 object.childSubstructure[e].trans = (object.childSubstructure[e].trans) ?
@@ -439,11 +406,6 @@
                 object.childSubstructure[e].scaling = (object.childSubstructure[e].scaling) ?
                     object.childSubstructure[e].scaling : parentTransform.scaling;
 
-                // JD: There is no need to call passToWebGL over and over.
-                //     Just "walk" through the entire scene once beforehand
-                //     and you're done.  You only need to do passWebGL again
-                //     if you create new objects and and them to your scene
-                //     on the fly.
                 passToWebGL(object.childSubstructure[e]);
                 drawObject(object.childSubstructure[e]);
             }
@@ -564,8 +526,8 @@
                         "scaling", "sz"
                     ));
                     tweens.push(createTween(
-                        startKeyframe.axis.theta/* * Math.PI / 180*/, 0,
-                        endKeyframe.axis.theta/* * Math.PI / 180*/, 0,
+                        startKeyframe.axis.theta, 0,
+                        endKeyframe.axis.theta, 0,
                         "axis", "theta"
                     ));
                     tweens.push(createTween(
@@ -627,7 +589,6 @@
             currentInterval = null;
         } else {
             currentInterval = setInterval(function () {
-                //currentRotation += 1.0;
 
                 // Note how we tween from the repeated-call, and not
                 // drawScene.  This allows us to invoke drawScene for
@@ -636,9 +597,7 @@
                 tweenScene();
 
                 drawScene();
-                //if (currentRotation >= 360.0) {
-                //    currentRotation -= 360.0;
-                //}
+
             }, 30);
         }
     });
