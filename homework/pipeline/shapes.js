@@ -8,6 +8,7 @@ var Shapes = {
 
     getIndices: function (a) {
         var b =[];
+
         for (var e = 0; e < a.length; e++){
             if ( e == a.length - 2){
                 b[e] = [ e, e+1, 0];
@@ -20,23 +21,7 @@ var Shapes = {
         }
         return b;
         
-    },
-
-    backg: function (){
-        var v =[
-                [ -4, 0, 6 ],
-                [ 4, 0, -2 ],
-                [ 2, 0, -4 ],
-                
-            ];
-
-        return {
-            vertices: v,
-
-            indices: [[0,1,2]],
-        };
-    },
-    
+    },    
 
     /*
      * Returns the vertices for a small pyramid.
@@ -118,9 +103,6 @@ var Shapes = {
             v= [],
             ind= [];
             
-
-
-
         //Generate the vertices array
         for (i = 0; i < (latitude + 1); i += 1) {
             currentLatitude = i * theta / latitude;
@@ -166,7 +148,6 @@ var Shapes = {
      * Returns the vertices for pencil tip.
      */
     xWing: function () {
-
         var numberOfSides = 4,
             size = 0.4,
             Xcenter = 0,
@@ -211,6 +192,7 @@ var Shapes = {
             indChild.push([i, nextVertexCenter, i + childSides]);
             indChild.push([nextVertexCenter, nextVertexHeight, i + childSides]);
         }
+
         var child = {
             vertices: vChild,
             indices: indChild
@@ -279,7 +261,6 @@ var Shapes = {
      * Returns the vertices for pencil body.
      */
     cilinder: function (n,x,y,z) {
-
         var childSides = n,
             childSize = 0.15,
             childXcenter = x,
@@ -423,7 +404,6 @@ var Shapes = {
             p0 = indexedVertices.vertices[indexedVertices.indices[i][0]];
             p1 = indexedVertices.vertices[indexedVertices.indices[i][1]];
             p2 = indexedVertices.vertices[indexedVertices.indices[i][2]];
-            console.log('here')
 
             // Technically, the first value is not a vector, but v can stand for vertex
             // anyway, so...

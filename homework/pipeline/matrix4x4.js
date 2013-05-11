@@ -26,11 +26,12 @@ var Matrix4x4 = (function () {
 
     },
     
-        // A private method for checking dimensions,
-        // throwing an exception when different.
+    // A private method for checking dimensions,
+    // throwing an exception when different.
     checkDimensions = function (m1) {
+
         if (m1.dimensions() !== 16) {
-            throw "Matri should be 4x4";
+            throw "Matrix should be 4x4";
         }
     };
     
@@ -98,18 +99,7 @@ var Matrix4x4 = (function () {
         return this.elements;
     };
 
-    // JD: Part of the problem is that you are doing different things in
-    //     each of these transform functions.  Be consistent.  I will
-    //     spell out what you are doing in each function.  Pick one
-    //     approach (except for translate) and stick with it.
-    //
-    //     There is no absolute right or wrong design---what matters is
-    //     that you pick one and use it consistently.
-
     //  Scaling matrix method
-    // JD: In this function, you are creating the "pure" scale matrix
-    //     and then are multiplying it to the receiver.  You are thus
-    //     scaling the prior transform.
     matrix4x4.prototype.scale = function (sx,sy,sz){
         var scalator = new Matrix4x4(sx, 0, 0, 0,
                                       0,sy, 0, 0,
@@ -120,18 +110,11 @@ var Matrix4x4 = (function () {
     };
 
     // Traslating matrix method
-    // JD: This is the only function where you are doing something that
-    //     is distinctly incorrect.  You are getting the incoming transform,
-    //     then just *plugging* the translate delta (dx, dy, dz) directly
-    //     into the 4th column of the matrix.  This is incorrect because
-    //     the incoming transform might already have values in there---by
-    //     doing a direct assignment, and not actually doing matrix
-    //     multiplication, you would be wiping out those prior values.
     matrix4x4.prototype.translate = function (dx,dy,dz){
-        var translated = new Matrix4x4();
-        translated.elements[3] = dx;
-        translated.elements[7] = dy;
-        translated.elements[11] = dz;
+        var translated = new Matrix4x4(1, 0, 0, dx,
+                                       0, 1, 0, dy,
+                                       0, 0, 1, dz,
+                                       0, 0, 0, 1);
 
         return translated.multiply(this);
     };
@@ -170,26 +153,23 @@ var Matrix4x4 = (function () {
         ys = y * s;
         zs = z * s;
 
-        return new Matrix4x4(
-            (x2 * oneMinusC) + c,   (xy * oneMinusC) - zs,  (xz * oneMinusC) + ys, 0,
-            (xy * oneMinusC) + zs,   (y2 * oneMinusC) + c,  (yz * oneMinusC) - xs, 0,
-            (xz * oneMinusC) - ys,  (yz * oneMinusC) + xs,   (z2 * oneMinusC) + c, 0,
-                                0,                      0,                      0, 1).multiply(this);
+        var multiplier = new Matrix4x4(
+            (x2 * oneMinusC) + c ,  (xy * oneMinusC) - zs,  (xz * oneMinusC) + ys, 0,
+            (xy * oneMinusC) + zs,  (y2 * oneMinusC) + c ,  (yz * oneMinusC) - xs, 0,
+            (xz * oneMinusC) - ys,  (yz * oneMinusC) + xs,  (z2 * oneMinusC) + c , 0,
+                                0,                      0,                      0, 1);
+
+        return multiplier.multiply(this);
     };
     
     // Matrix frustum perspective
     matrix4x4.prototype.frustum = function(l,r,b,t,n,f){
-        var fm = new Matrix4x4();
-        fm.elements = this.elements;
-        fm.elements[0]  = 2 * n / (r - l);
-        fm.elements[2]  = (r + l) / (r - l);
-        fm.elements[5]  = 2 * n / (t - b);
-        fm.elements[6]  = (t + b) / (t - b);
-        fm.elements[10] = -(f + n) / (f - n);
-        fm.elements[11] = -(2 * f * n) / (f - n);
-        fm.elements[14] = -1;
-        fm.elements[15] = 0;
-
+        var fm = new Matrix4x4(
+            2 * n / (r - l),               0,  (r + l) / (r - l),                      0, 
+                          0, 2 * n / (t - b),  (t + b) / (t - b),                      0,
+                          0,               0, -(f + n) / (f - n), -(2 * f * n) / (f - n),
+                          0,               0,                 -1,                      0);
+    
         return fm;
     }
 

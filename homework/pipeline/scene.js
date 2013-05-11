@@ -550,7 +550,6 @@
                     for (k = 0, maxK = tweens.length; k < maxK; k += 1) {
                         transformSetting = objectsToDraw[i][tweens[k].transform];
                         if (!transformSetting) {
-                            console.log('one');
                             transformSetting = {};
                             objectsToDraw[i][tweens[k].transform] = transformSetting;
                         }
