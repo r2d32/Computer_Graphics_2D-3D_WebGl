@@ -156,10 +156,16 @@
                     mode: gl.TRIANGLES,
                 },
                 {
-                    color: {r:0.5, g: 0.5, b:0.5},
+                    // JD: I changed this to red so that it is easy to spot.
+                    color: {r:1.0, g: 0.0, b:0.0},
                     vertices: Shapes.toRawTriangleArray(Shapes.cilinder(16,0.33,0.6,0)),
                     normals: Shapes.toNormalArray(Shapes.cilinder(16,0.33,0.6,0)),
                     mode: gl.TRIANGLES,
+                    // JD: This should move the object 1 unit to the left...but
+                    //     instead it disappears entirely!  Why is that?
+                    //     (comment out the trans to see the red cylinder
+                    //     magically reappear!)
+//                    trans: { dx: -1, dy: 0, sz: 0 }
                 },
                 {
                     color: {r:0.5, g: 0.5, b:0.5},
